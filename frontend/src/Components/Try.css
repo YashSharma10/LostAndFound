@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+
+.Homepagetry {
+  position: relative;
+  display: flex;
+  justify-content: center; /* Centers items horizontally */
+  align-items: center; /* Centers items vertically */
+  height: 100vh; /* Adjusted to cover the full viewport height */
+  width: 100%;
+  overflow: hidden; /* Ensures the background animation does not cause scroll bars */
+}
+
+h1.title {
+  font-family: "Fredericka the Great", serif;
+  font-size: 100px;
+  text-align: center;
+  z-index: 1000;
+  margin-top: -20px;
+}
+
+.animation1,
+.animation2,
+.animation3,
+.animation4,
+.animation5,
+.animation6,
+.animation7,
+.animation8,
+.animation9,
+.animation10,
+.animation11,
+.animation12 {
+  position: absolute; /* Ensures animations are positioned relative to the parent */
+  transform: translate(-50%, -50%); /* Centers animations precisely */
+  z-index: 10;
+}
+
+.animation1 {
+  top: 20%; /* Positioning from the top */
+  left: 15%; /* Positioning from the left */
+  width: 200px; /* Adjust width as needed */
+}
+
+.animation2 {
+  top: 10%; /* Positioning from the top */
+  left: 70%; /* Positioning from the left */
+  width: 500px; /* Adjust width as needed */
+}
+
+.animation3 {
+  top: 60%; /* Positioning from the top */
+  left: 60%; /* Positioning from the left */
+  width: 250px; /* Adjust width as needed */
+}
+
+.animation4 {
+  top: 55%; /* Positioning from the top */
+  left: 85%; /* Positioning from the left */
+  width: 220px; /* Adjust width as needed */
+}
+
+.animation5 {
+  top: 0%; /* Positioning from the top */
+  left: 50%; /* Positioning from the left */
+  width: 175px; /* Adjust width as needed */
+}
+
+.animation6 {
+  top: 65%; /* Positioning from the top */
+  left: 30%; /* Positioning from the left */
+  width: 220px; /* Adjust width as needed */
+}
+
+.animation7 {
+  top: 60%; /* Positioning from the top */
+  left: 10%; /* Positioning from the left */
+  width: 200px; /* Adjust width as needed */
+}
+
+.animation8 {
+  top: 10%; /* Positioning from the top */
+  left: -3%; /* Positioning from the left */
+  width: 200px; /* Adjust width as needed */
+}
+
+.animation9 {
+  top: 20%; /* Positioning from the top */
+  left: 80%; /* Positioning from the left */
+  width: 200px; /* Adjust width as needed */
+}
+
+.animation10 {
+  top: 2%; /* Positioning from the top */
+  left: 35%; /* Positioning from the left */
+  width: 150px; /* Adjust width as needed */
+}
+
+.animation11 {
+  top: 5%; /* Positioning from the top */
+  left: 92%; /* Positioning from the left */
+  width: 200px; /* Adjust width as needed */
+}
+
+.animation12 {
+  top: 50%; /* Positioning from the top */
+  left: -3%; /* Positioning from the left */
+  width: 200px; /* Adjust width as needed */
+}
+
+
+.grid-background-container {
+  position: absolute;
+  opacity: 0.35;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='%23000000'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  background-size: 16px 16px;
+  background-color: #0b1020;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0));
+}
+
+@media (prefers-color-scheme: dark) {
+  .grid-background-container {
+    background-color: #0b1020;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='%23ffffff'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+  }
+}
+
+.grid-background-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  mask-image: radial-gradient(ellipse at center, transparent 20%, black);
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .grid-background-overlay {
+    background-color: black;
+  }
+}

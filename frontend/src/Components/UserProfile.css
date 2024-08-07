@@ -1,0 +1,156 @@
+.profile-container {
+  font-family: Arial, sans-serif;
+}
+
+.logo {
+  height: 50px;
+}
+
+.nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+.profile-container {
+  padding: 20px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-pic-container {
+  margin-right: 20px;
+}
+
+.profile-pic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 50%;
+}
+
+.user-pic-icon {
+  font-size: 60px;
+}
+
+.profile-details {
+  font-weight: 600;
+  line-height: 25px;
+  font-size: larger;
+  font-family: Poppins;
+  margin-left: 20px;
+}
+
+.profile-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.profile-details h2 {
+  margin: 0;
+}
+
+.profile-details p {
+  margin: 5px 0;
+}
+
+/* .profile-btn {
+  border-radius: 10px;
+  background-color: grey;
+  font-weight: bold;
+}
+
+.profile-buttons button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+} */
+
+.posted-heading {
+  margin-top: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.posted-detail {
+  margin: 0 auto;
+}
+
+.posts-table {
+  width: 100%;
+  border-spacing: 0; /* Set to 0 to allow border radius to apply to the entire table */
+  border-radius: 10px; /* Add border-radius to the table */
+  overflow: hidden; /* Ensure rounded corners apply */
+  border: 1px solid #ccc; /* Add border to the table */
+}
+
+.posts-table th,
+.posts-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.posts-table th {
+  background: rgba( 82, 171, 255, 0.45 );
+backdrop-filter: blur( 7px );
+-webkit-backdrop-filter: blur( 7px );
+  font-size: 20px;
+}
+
+tr {
+  background: rgba( 122, 203, 255, 0.4 );
+  backdrop-filter: blur( 6px );
+  -webkit-backdrop-filter: blur( 6px );
+}
+
+.post-photo {
+  width: 50px;
+  height: 50px;
+  background-color: #ccc;
+}
+
+thead{
+  display: contents !important;
+}
+
+.profile-btn {
+  background: rgb(93, 93, 93);
+  color: white;
+  font-weight: 600;
+  position: relative;
+  padding: 5px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: 'Poppins';
+  font-weight: 400;
+}
+
+.profile-btn:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 40px;
+  content: '';
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.7) 28%, rgba(255, 255, 255, 0.6) 32%, transparent);
+  background-size: 100% 500%;
+  transition-duration: 300ms;
+}
+
+.profile-btn:hover:before {
+  background-size: 500% 100%;
+}
