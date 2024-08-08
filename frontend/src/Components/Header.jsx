@@ -5,9 +5,12 @@ import ncuDark from "../Assets/ncuDark.png"; // Import the dark mode logo
 import "../App.css";
 import "./header.css";
 import ToggleSwitch from "./ToggleSwitch";
+import { RxHamburgerMenu } from "react-icons/rx";
+
 import axiosInstance from "./axios"; // Import axios instance
 
 function Header() {
+  const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState(null); // User state, initially null
   const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
   const [imgUrl, setImgUrl] = useState(ncu);
@@ -53,7 +56,10 @@ function Header() {
 
   return (
     <div>
-      <header className="page-header">
+      <div className="toogle-header">
+        <RxHamburgerMenu className="toggler" onClick={()=>setToggle(!toggle)} />
+      </div>
+      <header className="page-header" style={toggle?{display:"block"}:{display:"none"}} >
         <div className="logo">
           <Link to="/Home">
             <img alt="logo" src={imgUrl} className="logo-img" />
@@ -100,7 +106,9 @@ function Header() {
               </div>
             </div>
           ) : (
-            <h1><Link to="/LoginForm">LOGIN</Link></h1>
+            <h1>
+              <Link to="/LoginForm">LOGIN</Link>
+            </h1>
           )}
         </div>
       </header>

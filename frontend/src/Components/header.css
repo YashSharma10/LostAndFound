@@ -1,3 +1,12 @@
+.toogle-header{
+  background-color: #191e30;
+  display: none;
+}
+.toggler{
+  color: #ff9011;
+  font-size: 60px;
+  padding: 10px;
+}
 .page-header {
   position: relative;
   top: 0;
@@ -106,7 +115,11 @@ body.dark .blue-btn:hover {
 }
 
 @media (max-width: 768px) {
+  .toogle-header{
+    display: block;
+  }
   .page-header {
+    /* display: none; */
     display: flex;
     flex-direction: column;
     justify-content: center;
