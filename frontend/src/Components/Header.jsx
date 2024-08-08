@@ -25,7 +25,7 @@ function Header() {
       setToggle(true);
     } else setToggle(false);
     window.addEventListener("resize", handleResize);
-  }, [window.innerWidth]);
+  }, [window.innerWidth,toggle]);
 
   useEffect(() => {
     const bodyClass = document.body.classList;
