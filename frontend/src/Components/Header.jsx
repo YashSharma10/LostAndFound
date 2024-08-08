@@ -15,6 +15,18 @@ function Header() {
   const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
   const [imgUrl, setImgUrl] = useState(ncu);
 
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    if (screenWidth > 900) {
+      setToggle(true);
+    } else setToggle(false);
+    window.addEventListener("resize", handleResize);
+  }, [window.innerWidth]);
+
   useEffect(() => {
     const bodyClass = document.body.classList;
     if (isDarkMode) {
@@ -57,9 +69,15 @@ function Header() {
   return (
     <div>
       <div className="toogle-header">
-        <RxHamburgerMenu className="toggler" onClick={()=>setToggle(!toggle)} />
+        <RxHamburgerMenu
+          className="toggler"
+          onClick={() => setToggle(!toggle)}
+        />
       </div>
-      <header className="page-header" style={toggle?{display:"block"}:{display:"none"}} >
+      <header
+        className="page-header"
+        style={toggle ? { display: "flex" } : { display: "none" }}
+      >
         <div className="logo">
           <Link to="/Home">
             <img alt="logo" src={imgUrl} className="logo-img" />
@@ -67,11 +85,21 @@ function Header() {
         </div>
         <div className="head">
           <nav className="navbar">
-            <Link to="/Home" onClick={()=>setToggle(!toggle)}>HOME</Link>
-            <Link to="/Lostitm" onClick={()=>setToggle(!toggle)}>LOST ITEMS</Link>
-            <Link to="/Founditm" onClick={()=>setToggle(!toggle)}>FOUND ITEMS</Link>
-            <Link to="/Report" onClick={()=>setToggle(!toggle)}>REPORT</Link>
-            <Link to="/Profile" onClick={()=>setToggle(!toggle)}>Profile</Link>
+            <Link to="/Home" onClick={() => setToggle(!toggle)}>
+              HOME
+            </Link>
+            <Link to="/Lostitm" onClick={() => setToggle(!toggle)}>
+              LOST ITEMS
+            </Link>
+            <Link to="/Founditm" onClick={() => setToggle(!toggle)}>
+              FOUND ITEMS
+            </Link>
+            <Link to="/Report" onClick={() => setToggle(!toggle)}>
+              REPORT
+            </Link>
+            <Link to="/Profile" onClick={() => setToggle(!toggle)}>
+              Profile
+            </Link>
           </nav>
         </div>
         <div className="Switch">
