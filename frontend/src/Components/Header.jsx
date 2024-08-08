@@ -67,11 +67,11 @@ function Header() {
         </div>
         <div className="head">
           <nav className="navbar">
-            <Link to="/Home">HOME</Link>
-            <Link to="/Lostitm">LOST ITEMS</Link>
-            <Link to="/Founditm">FOUND ITEMS</Link>
-            <Link to="/Report">REPORT</Link>
-            <Link to="/Profile">Profile</Link>
+            <Link to="/Home" onClick={()=>setToggle(!toggle)}>HOME</Link>
+            <Link to="/Lostitm" onClick={()=>setToggle(!toggle)}>LOST ITEMS</Link>
+            <Link to="/Founditm" onClick={()=>setToggle(!toggle)}>FOUND ITEMS</Link>
+            <Link to="/Report" onClick={()=>setToggle(!toggle)}>REPORT</Link>
+            <Link to="/Profile" onClick={()=>setToggle(!toggle)}>Profile</Link>
           </nav>
         </div>
         <div className="Switch">
