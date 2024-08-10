@@ -46,7 +46,7 @@ function Header() {
   return (
     <div>
       <div className="toogle-header">  
-                <div className="logo">
+                <div className="logo-mobile">
           <Link to="/Home">
             <img alt="logo" src={imgUrl} className="logo-img-mob" />
           </Link>

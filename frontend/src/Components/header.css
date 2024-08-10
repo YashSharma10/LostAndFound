@@ -33,7 +33,7 @@ display: none;
 }
 
 .page-header.open {
-  background-color: #f8f8f8;
+  background-color: transparent;
 }
 
 .logo-container {
@@ -149,8 +149,9 @@ display: none;
     margin-bottom: 0;
   }
 
-  .logo-img{
+  .logo{
     display: none;
+    position: absolute;
   }
 
   .navbar {
