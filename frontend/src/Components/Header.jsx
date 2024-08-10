@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ncu from "../Assets/ncu.png";
-import ncuDark from "../Assets/ncuDark.png"; // Import the dark mode logo
+import ncuDark from "../Assets/ncuDark.png";
 import "../App.css";
 import "./header.css";
-import ToggleSwitch from "./ToggleSwitch";
-import axiosInstance from "./axios"; // Import axios instance
+import axiosInstance from "./axios";
 
 function Header() {
-  const [user, setUser] = useState(null); // User state, initially null
-  const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
+  const [user, setUser] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [imgUrl, setImgUrl] = useState(ncu);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const bodyClass = document.body.classList;
@@ -24,7 +24,6 @@ function Header() {
   }, [isDarkMode]);
 
   useEffect(() => {
-    // Fetch user data if logged in
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get("/auth/getdata");
@@ -34,7 +33,6 @@ function Header() {
         setUser(null);
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -51,39 +49,25 @@ function Header() {
     }
   };
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <div>
-      <header className="page-header">
-        <div className="logo">
-          <Link to="/Home">
-            <img alt="logo" src={imgUrl} className="logo-img" />
-          </Link>
-        </div>
-        <div className="head">
-          <nav className="navbar">
-            <Link to="/Home">HOME</Link>
-            <Link to="/Lostitm">LOST ITEMS</Link>
-            <Link to="/Founditm">FOUND ITEMS</Link>
-            <Link to="/Report">REPORT</Link>
-            <Link to="/Profile">Profile</Link>
-          </nav>
-        </div>
-        <div className="Switch">
-          <input
-            type="checkbox"
-            className="checkbox"
-            id="checkbox"
-            checked={isDarkMode}
-            onChange={handleToggle}
-          />
-          <label htmlFor="checkbox" className="checkbox-label">
-            <i className="fas fa-moon"></i>
-            <i className="fas fa-sun"></i>
-            <span className="balldark"></span>
-          </label>
-        </div>
-        <div className="btns">
-          {user ? (
+    <header className="page-header">
+      <div className="logo-container">
+        <Link to="/Home">
+          <img alt="logo" src={imgUrl} className="logo-img" />
+        </Link>
+      </div>
+      <nav className={`navbar ${menuOpen ? 'open' : ''}`}>
+        <Link to="/Home" onClick={() => setMenuOpen(false)}>HOME</Link>
+        <Link to="/Lostitm" onClick={() => setMenuOpen(false)}>LOST ITEMS</Link>
+        <Link to="/Founditm" onClick={() => setMenuOpen(false)}>FOUND ITEMS</Link>
+        <Link to="/Report" onClick={() => setMenuOpen(false)}>REPORT</Link>
+        <Link to="/Profile" onClick={() => setMenuOpen(false)}>PROFILE</Link>
+        {user ? (
+          <>
             <div className="dropdown">
               <button className="dropbtn">
                 <img
@@ -95,16 +79,33 @@ function Header() {
                 {user.name}
               </button>
               <div className="dropdown-content">
-                <Link to="/Profile">Profile</Link>
+                <Link to="/Profile" onClick={() => setMenuOpen(false)}>Profile</Link>
                 <button onClick={handleLogout}>Logout</button>
               </div>
             </div>
-          ) : (
-            <h1><Link to="/LoginForm">LOGIN</Link></h1>
-          )}
-        </div>
-      </header>
-    </div>
+          </>
+        ) : (
+          <Link to="/LoginForm" onClick={() => setMenuOpen(false)}>LOGIN</Link>
+        )}
+      </nav>
+      <div className="switch-container">
+        <input
+          type="checkbox"
+          className="checkbox"
+          id="checkbox"
+          checked={isDarkMode}
+          onChange={handleToggle}
+        />
+        <label htmlFor="checkbox" className="checkbox-label">
+          <i className="fas fa-moon"></i>
+          <i className="fas fa-sun"></i>
+          <span className="balldark"></span>
+        </label>
+      </div>
+      <button className="menu-toggle" onClick={toggleMenu}>
+        {menuOpen ? '✕' : '☰'}
+      </button>
+    </header>
   );
 }
 
