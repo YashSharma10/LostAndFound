@@ -1,10 +1,5 @@
-.toogle-header {
-  background-color: transparent;
-  display: flex;
-  align-content: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
+.toogle-header{
+display: none;
 }
 
 .toggler {
@@ -34,7 +29,6 @@
   z-index: 100;
   background-color: #ffffff;
   padding: 15px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -130,9 +124,18 @@
 
 @media (max-width: 900px) {
   .toogle-header {
-    display: block;
+    background-color: transparent;
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;    
+    justify-content: space-between;
   }
 
+  .toggler {
+    display: block; /* Show on smaller screens */
+  }
   .page-header {
     flex-direction: column;
     justify-content: space-between;
@@ -178,6 +181,7 @@
     width: max-content;
     display: flex;
     flex-direction: column;
+    gap: 1px;
     justify-content: start;
     font-size: 22px;
     color: #ffffff;
