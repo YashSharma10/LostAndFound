@@ -13,15 +13,12 @@ function Header() {
   const [user, setUser] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [imgUrl, setImgUrl] = useState(ncu);
-  const [userData, setUserData] = useState(null); // State for Google User Data
 
-  // Toggle dark mode based on isDarkMode state
   useEffect(() => {
     document.body.classList.toggle("dark", isDarkMode);
     setImgUrl(isDarkMode ? ncuDark : ncu);
   }, [isDarkMode]);
 
-  // Fetch user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -35,7 +32,6 @@ function Header() {
     fetchUserData();
   }, []);
 
-  // Handle logout action
   const handleLogout = async () => {
     try {
       await axiosInstance.get("/auth/logout");
@@ -45,32 +41,13 @@ function Header() {
     }
   };
 
-  // Handle Google login and logout
   const loginWithGoogle = () => {
     window.open("http://localhost:6005/auth/google/callback", "_self");
   };
 
   const logoutGoogle = () => {
     window.open("http://localhost:6005/logout", "_self");
-    setUserData(null);
   };
-
-  // Fetch Google user data
-  const getUser = async () => {
-    try {
-      const response = await axiosInstance.get("/login/success", {
-        withCredentials: true,
-      });
-      setUserData(response.data.user);
-    } catch (error) {
-      console.error("Google Login Error:", error.message);
-    }
-  };
-
-  // Fetch Google user data on component mount
-  useEffect(() => {
-    getUser();
-  }, []);
 
   return (
     <div>
@@ -80,7 +57,6 @@ function Header() {
             <img alt="logo" src={imgUrl} className="logo-img-mob" />
           </Link>
         </div>
-
         <button className="toggler" onClick={() => setToggle(!toggle)}>
           {toggle ? <FaTimes /> : <RxHamburgerMenu />}
         </button>
@@ -113,22 +89,22 @@ function Header() {
           </label>
         </div>
         <div className="btns">
-          {user || (userData && Object.keys(userData).length > 0) ? (
+          {user ? (
             <div className="dropdown">
               <button className="dropbtn">
                 <img
                   width="35"
                   height="35"
-                  src={userData ? userData.image : "https://img.icons8.com/ios-filled/50/gender-neutral-user.png"}
+                  src={user.image || "https://img.icons8.com/ios-filled/50/gender-neutral-user.png"}
                   alt="Profile"
                 />
-                {userData ? userData.displayName : user.name}
+                {user.displayName || user.name}
               </button>
               <div className="dropdown-content">
                 <Link to="/Profile" onClick={() => setToggle(false)}>
                   Profile
                 </Link>
-                <button onClick={userData ? logoutGoogle : handleLogout}>Logout</button>
+                <button onClick={logoutGoogle}>Logout</button>
               </div>
             </div>
           ) : (
