@@ -14,7 +14,7 @@ const checkAuth = (req, res, next) => {
 };
 
 router.post("/lost", checkAuth, async (req, res) => {
-  const { location, itemName, category, date, description, images } = req.body;
+  const { location, itemName, category, date, description, status, images } = req.body;
 
   try {
     const newLostItem = new Lost({
@@ -23,6 +23,7 @@ router.post("/lost", checkAuth, async (req, res) => {
       category,
       date,
       description,
+      status,
       images,
       user: req.userId // Save the user ID
     });
@@ -35,7 +36,7 @@ router.post("/lost", checkAuth, async (req, res) => {
 });
 
 router.post("/found", checkAuth, async (req, res) => {
-  const { location, itemName, category, date, description, images } = req.body;
+  const { location, itemName, category, date, description, status, images } = req.body;
 
   try {
     const newFoundItem = new Found({
@@ -44,6 +45,7 @@ router.post("/found", checkAuth, async (req, res) => {
       category,
       date,
       description,
+      status,
       images,
       user: req.userId // Save the user ID
     });

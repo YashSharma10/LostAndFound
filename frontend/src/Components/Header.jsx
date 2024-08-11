@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ncu from "../Assets/ncu.png";
-import ncuDark from "../Assets/ncuDark.png"; // Import the dark mode logo
+import ncuDark from "../Assets/ncuDark.png";
 import "../App.css";
 import "./header.css";
-import ToggleSwitch from "./ToggleSwitch";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
 import axiosInstance from "./axios"; // Import axios instance
+import { FaTimes } from "react-icons/fa";
 
 function Header() {
   const [userData, setUserData] = useState(null);
@@ -52,11 +52,9 @@ function Header() {
   //   // Handle login failure
   // };
   const [toggle, setToggle] = useState(false);
-  const [user, setUser] = useState(null); // User state, initially null
-  const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
+  const [user, setUser] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [imgUrl, setImgUrl] = useState(ncu);
-
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
@@ -103,53 +101,57 @@ function Header() {
   //   }
   // };
 
-  const handleToggle = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await axiosInstance.get("/auth/getdata");
+  //       setUser(response.data.user);
+  //     } catch (error) {
+  //       console.error("Failed to fetch user data:", error);
+  //       setUser(null);
+  //     }
+  //   };
+  //   fetchUserData();
+  // }, []);
+
+  const handleToggle = () => setToggle(!toggle);
 
   return (
     <div>
-      <div className="toogle-header">
-        <RxHamburgerMenu
-          className="toggler"
-          onClick={() => setToggle(!toggle)}
-        />
+      <div className="toogle-header">  
+                <div className="logo-mobile">
+          <Link to="/Home">
+            <img alt="logo" src={imgUrl} className="logo-img-mob" />
+          </Link>
+        </div>
+
+        <button className="toggler" onClick={handleToggle}>
+          {toggle ? <FaTimes /> : <RxHamburgerMenu />}
+
+        </button>
+        
       </div>
-      <header
-        className="page-header"
-        style={toggle ? { display: "flex" } : { display: "none" }}
-      >
+      <header className={`page-header ${toggle ? "open" : ""}`}>
         <div className="logo">
           <Link to="/Home">
             <img alt="logo" src={imgUrl} className="logo-img" />
           </Link>
         </div>
-        <div className="head">
-          <nav className="navbar">
-            <Link to="/Home" onClick={() => setToggle(!toggle)}>
-              HOME
-            </Link>
-            <Link to="/Lostitm" onClick={() => setToggle(!toggle)}>
-              LOST ITEMS
-            </Link>
-            <Link to="/Founditm" onClick={() => setToggle(!toggle)}>
-              FOUND ITEMS
-            </Link>
-            <Link to="/Report" onClick={() => setToggle(!toggle)}>
-              REPORT
-            </Link>
-            <Link to="/Profile" onClick={() => setToggle(!toggle)}>
-              Profile
-            </Link>
-          </nav>
-        </div>
-        <div className="Switch">
+        <nav className={`navbar ${toggle ? "open" : ""}`}>
+          <Link to="/Home" onClick={() => setToggle(false)}>HOME</Link>
+          <Link to="/Lostitm" onClick={() => setToggle(false)}>LOST ITEMS</Link>
+          <Link to="/Founditm" onClick={() => setToggle(false)}>FOUND ITEMS</Link>
+          <Link to="/Report" onClick={() => setToggle(false)}>REPORT</Link>
+          <Link to="/Profile" onClick={() => setToggle(false)}>PROFILE</Link>
+        </nav>
+        <div className="switch-container">
           <input
             type="checkbox"
             className="checkbox"
             id="checkbox"
             checked={isDarkMode}
-            onChange={handleToggle}
+            onChange={() => setIsDarkMode(!isDarkMode)}
           />
           <label htmlFor="checkbox" className="checkbox-label">
             <i className="fas fa-moon"></i>
@@ -206,13 +208,15 @@ function Header() {
                 {user.name}
               </button>
               <div className="dropdown-content">
-                <Link to="/Profile">Profile</Link>
+                <Link to="/Profile" onClick={() => setToggle(false)}>
+                  Profile
+                </Link>
                 <button onClick={handleLogout}>Logout</button>
               </div>
             </div>
           ) : (
             <h1>
-              <Link to="/LoginForm">LOGIN</Link>
+              <Link to="/LoginForm" onClick={() => setToggle(false)}>LOGIN</Link>
             </h1>
           )} */}
         </div>

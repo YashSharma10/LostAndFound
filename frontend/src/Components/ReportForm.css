@@ -2,31 +2,8 @@
   display: flex;
   justify-content: center;
   padding: 16px;
-  height: 120vh;
+  min-height: 100vh;
   text-align: center;
-}
-
-.check-box {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 20px;
-  font-size: 20px;
-}
-
-.check-box label {
-  margin-left: 10px;
-  font-size: 1.5rem;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-}
-
-.check-box input[type="radio"] {
-  margin-right: 5px;
-  height: 30px;
-  width: 30px;
 }
 
 .form-wrapper {
@@ -45,28 +22,29 @@
   background: linear-gradient(132deg, rgba(255, 255, 255, 0.20) 18.17%, rgba(255, 255, 255, 0.06) 52.35%, rgba(176, 176, 176, 0.04) 93.52%);
   box-shadow: 2px 4px 16.1px 6px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(12.5px);
-  z-index: 1; /* Add a higher z-index for the form wrapper */
+  z-index: 1;
+  padding: 20px;
 }
 
 .form-title {
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin: 20px;
+  margin: 10px 0;
   color: #000;
   font-family: Poppins;
   font-style: normal;
   font-weight: 600;
-  line-height: normal;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
+  width: 100%;
   gap: 8px;
 }
 
-.input {
+.input,
+.textarea {
   font-weight: 600;
   border-radius: 15px;
   border: 2px solid #bbb6b665;
@@ -78,8 +56,7 @@
   );
   box-shadow: 2px 4px 16.1px 6px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(12.5px);
-  width: 500px;
-  height: 60px;
+  width: 100%;
   padding: 12px 18px;
   outline: none;
   font-size: 1rem;
@@ -87,11 +64,7 @@
 
 .textarea {
   padding: 10px 15px;
-  border-radius: 16px;
-  outline: none;
   font-size: 1.2rem;
-  font-weight: 600;
-  border-radius: 15px;
   border: 2px solid #fff;
   opacity: 0.8;
   background: rgba(164, 164, 164, 0.5);
@@ -101,15 +74,16 @@
   display: flex;
   gap: 8px;
   padding: 20px 0;
-  margin-left: 80px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .button21 {
-  width: 40%;
+  flex: 1;
   border-radius: 16px;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: bold;
-  padding: 8px 0;
+  padding: 10px 0;
   cursor: pointer;
   text-align: center;
 }
@@ -128,12 +102,32 @@
   opacity: 0.8;
 }
 
+.check-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px 0;
+  font-size: 1.2rem;
+}
+
+.check-box label {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.check-box input[type="radio"] {
+  margin-right: 5px;
+  height: 20px;
+  width: 20px;
+}
+
 .balls21 {
-  position: absolute; /* Change to absolute for the balls container */
+  position: absolute;
   top: 0;
   right: 0;
   transform: translate(50%, -50%);
-  z-index: 0; /* Ensure the balls are above the form */
+  z-index: 0;
 }
 
 .ball21 {
@@ -141,31 +135,66 @@
   position: absolute;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  z-index: 0; /* Ensure the balls are above the form */
+  z-index: 0;
   animation: floatAnimation 2s ease-in-out infinite alternate;
 }
 
-@keyframes floatAnimation {
-  0% {
-    transform: translate(-50%, -50%);
+@media (max-width: 768px) {
+  .input,
+  .textarea {
+    font-size: 0.9rem;
+    padding: 10px 15px;
   }
-  100% {
-    transform: translate(-50%, -50%) translateY(-20px);
+
+  .form-title {
+    font-size: 1.3rem;
+  }
+
+  .button21 {
+    font-size: 1rem;
+    padding: 8px 0;
+  }
+
+  .check-box {
+    font-size: 1rem;
+  }
+
+  .check-box label {
+    font-size: 0.9rem;
+  }
+
+  .check-box input[type="radio"] {
+    height: 18px;
+    width: 18px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .balls21 {
+    display: none;
   }
 }
 
-.ballz1 {
-  top: 600px;
-  left: -200px;
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(90deg,#0084ff,#0ff);
-}
+@media (max-width: 480px) {
+  .form-wrapper {
+    padding: 15px;
+  }
 
-.ballz2 {
-  bottom: -400px;
-  left: -700px;
-  width: 175px;
-  height: 175px;
-  background: linear-gradient(90deg,#00ffd9,#00ff84);
+  .input,
+  .textarea {
+    font-size: 0.8rem;
+  }
+
+  .form-title {
+    font-size: 1.2rem;
+  }
+
+  .check-box {
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0;
+  }
 }
