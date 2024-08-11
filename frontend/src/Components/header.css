@@ -65,7 +65,6 @@ transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 
 .page-header.open {
   background-color: #f8f8f8;
-  background-color: #f8f8f8;
   position: absolute;
   margin-top: 70px;
 }
