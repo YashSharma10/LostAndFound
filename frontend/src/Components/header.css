@@ -9,7 +9,12 @@
   width: 80px;
   transition: transform 0.3s ease;
 }
-
+.logo{
+  width: 100px !important;
+  position: absolute;
+    left: 10px;
+    height: auto !important;
+}
 .logo-img-mob {
   width: 80px;
   display: none;
@@ -35,27 +40,47 @@
   top: 0;
   width: 100%;
   display: flex;
-  justify-content: flex-end; /* Aligns the menu to the right */
   align-items: center;
   z-index: 100;
   background-color: #ffffff;
   padding: 15px 30px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  justify-content: space-around;
+  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.login-with-google-btn{
+right: 10px;
+position: absolute;
+float: right;
+font-size: 16px;
+color: rgb(0, 0, 0);
+text-decoration: none;
+font-weight: 500;
+font-family: "Poppins", sans-serif;
+transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .page-header.open {
   background-color: #f8f8f8;
+  background-color: #f8f8f8;
+  position: absolute;
+  margin-top: 70px;
 }
 
 .navbar {
   display: flex;
   align-items: center;
-  gap: 20px; /* Reduce gap between links */
+  justify-content: center;
+  text-align: center;
+  gap: 30px; /* Reduce gap between links */
   transition: all 0.3s ease;
 }
 
 .navbar a {
-  font-size: 18px;
+  font-size: 19px;
   color: rgb(0, 0, 0);
   text-decoration: none;
   font-weight: 500;

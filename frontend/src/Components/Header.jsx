@@ -15,36 +15,38 @@ function Header() {
   const [imgUrl, setImgUrl] = useState(ncu);
   const [userData, setUserData] = useState(null); // State for Google User Data
 
+  // Toggle dark mode based on isDarkMode state
   useEffect(() => {
     document.body.classList.toggle("dark", isDarkMode);
     setImgUrl(isDarkMode ? ncuDark : ncu);
   }, [isDarkMode]);
 
+  // Fetch user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get("/auth/getdata");
         setUser(response.data.user);
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        console.error("Failed to fetch user data:", error.message);
         setUser(null);
       }
     };
     fetchUserData();
   }, []);
 
-  const handleToggle = () => setToggle(!toggle);
-
+  // Handle logout action
   const handleLogout = async () => {
     try {
       await axiosInstance.get("/auth/logout");
       setUser(null);
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error("Logout failed:", error.message);
     }
   };
 
-  const loginwithgoogle = () => {
+  // Handle Google login and logout
+  const loginWithGoogle = () => {
     window.open("http://localhost:6005/auth/google/callback", "_self");
   };
 
@@ -53,6 +55,7 @@ function Header() {
     setUserData(null);
   };
 
+  // Fetch Google user data
   const getUser = async () => {
     try {
       const response = await axiosInstance.get("/login/success", {
@@ -60,10 +63,11 @@ function Header() {
       });
       setUserData(response.data.user);
     } catch (error) {
-      console.error("Google Login Error:", error);
+      console.error("Google Login Error:", error.message);
     }
   };
 
+  // Fetch Google user data on component mount
   useEffect(() => {
     getUser();
   }, []);
@@ -77,7 +81,7 @@ function Header() {
           </Link>
         </div>
 
-        <button className="toggler" onClick={handleToggle}>
+        <button className="toggler" onClick={() => setToggle(!toggle)}>
           {toggle ? <FaTimes /> : <RxHamburgerMenu />}
         </button>
       </div>
@@ -128,7 +132,7 @@ function Header() {
               </div>
             </div>
           ) : (
-            <button className="login-with-google-btn" onClick={loginwithgoogle}>
+            <button className="login-with-google-btn" onClick={loginWithGoogle}>
               Sign In With Google
             </button>
           )}
