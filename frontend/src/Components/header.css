@@ -1,3 +1,6 @@
+.btns{
+  display: flex;
+}
 .login-page .login-with-google-btn {
   transition: background-color .3s, box-shadow .3s;
   cursor: pointer;
