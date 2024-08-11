@@ -130,16 +130,16 @@ h1.title {
   h1.title {
     font-size: 40px;
   }
-  .animation1 { width: 80px; top: 30%; left: 25%; }
-  .animation2 { width: 200px; top: 20%; left: 50%; }
-  .animation3 { width: 120px; top: 70%; left: 50%; }
-  .animation4 { width: 100px; top: 65%; left: 75%; }
-  .animation5 { width: 80px; top: 10%; left: 40%; }
-  .animation6 { width: 100px; top: 75%; left: 20%; }
-  .animation7 { width: 80px; top: 70%; left: 20%; }
-  .animation8 { width: 80px; top: 20%; left: 5%; }
-  .animation9 { width: 80px; top: 30%; left: 70%; }
-  .animation10 { width: 80px; top: 15%; left: 25%; }
-  .animation11 { width: 80px; top: 15%; left: 80%; }
-  .animation12 { width: 80px; top: 60%; left: 5%; }
+  .animation1 { width: 120px; top: 35%; left: 5%; }
+  .animation2 { width: 200px; top: 30%; left: 45%; }
+  .animation3 { width: 120px; top: 50%; left: 50%; }
+  .animation4 { width: 100px; top: 55%; left: 80%; }
+  .animation5 { width: 100px; top: 7%; left: 45%; }
+  .animation6 { width: 120px; top: 70%; left: 55%; }
+  .animation7 { width: 100px; top: 65%; left: 25%; }
+  .animation8 { width: 130px; top: 20%; left: 2%; }
+  .animation9 { width: 120px; top: 32%; left: 80%; }
+  .animation10 { width: 80px; top: 20%; left: 32%; }
+  .animation11 { width: 100px; top: 12%; left: 80%; }
+  .animation12 { width: 120px; top: 55%; left: 3%; }
 }
