@@ -6,10 +6,51 @@ import "../App.css";
 import "./header.css";
 import ToggleSwitch from "./ToggleSwitch";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 import axiosInstance from "./axios"; // Import axios instance
 
 function Header() {
+  const [userData, setUserData] = useState(null);
+  const getUser = async () => {
+    try {
+      const response = await axios
+        .get("http://localhost:6005/login/sucess", {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setUserData(res.data.user);
+        });
+
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    
+    console.log("Data", userData?Object.keys(userData):"Nothing");
+  // logoout
+  const logout = () => {
+    window.open("http://localhost:6005/logout", "_self");
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const loginwithgoogle = () => {
+    window.open("http://localhost:6005/auth/google/callback", "_self");
+  };
+
+  // const onSuccess = (response) => {
+  //   setUserData(response.profileObj);
+  //   // Handle successful login, e.g., store user data, redirect
+  // };
+
+  // const onFailure = (error) => {
+  //   console.error("Google Login Error:", error);
+  //   // Handle login failure
+  // };
   const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState(null); // User state, initially null
   const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
@@ -25,7 +66,7 @@ function Header() {
       setToggle(true);
     } else setToggle(false);
     window.addEventListener("resize", handleResize);
-  }, [window.innerWidth,toggle]);
+  }, [window.innerWidth, toggle]);
 
   useEffect(() => {
     const bodyClass = document.body.classList;
@@ -38,32 +79,32 @@ function Header() {
     }
   }, [isDarkMode]);
 
-  useEffect(() => {
-    // Fetch user data if logged in
-    const fetchUserData = async () => {
-      try {
-        const response = await axiosInstance.get("/auth/getdata");
-        setUser(response.data.user);
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-        setUser(null);
-      }
-    };
+  // useEffect(() => {
+  //   // Fetch user data if logged in
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await axiosInstance.get("/auth/getdata");
+  //       setUser(response.data.user);
+  //     } catch (error) {
+  //       console.error("Failed to fetch user data:", error);
+  //       setUser(null);
+  //     }
+  //   };
 
-    fetchUserData();
-  }, []);
+  //   fetchUserData();
+  // }, []);
+
+  // const handleLogout = async () => {
+  //   try {
+  //     await axiosInstance.get("/auth/logout");
+  //     setUser(null);
+  //   } catch (error) {
+  //     console.error("Logout failed:", error);
+  //   }
+  // };
 
   const handleToggle = () => {
     setIsDarkMode(!isDarkMode);
-  };
-
-  const handleLogout = async () => {
-    try {
-      await axiosInstance.get("/auth/logout");
-      setUser(null);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
   };
 
   return (
@@ -117,7 +158,43 @@ function Header() {
           </label>
         </div>
         <div className="btns">
-          {user ? (
+          {/* <div>
+            {user ? (
+              <div>
+                <img src={userData.imageUrl} alt="User" />
+                <h2>{userData.name}</h2>
+              </div>
+            ) : (
+              <GoogleLogin
+                clientId="YOUR_CLIENT_ID"
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+              />
+            )}
+          </div> */}
+          <button className="login-with-google-btn" style={userData?{display:"none"}:null} onClick={loginwithgoogle}>
+            Sign In With Google
+          </button>
+          {userData?Object?.keys(userData)?.length > 0 ? (
+            <>
+              <li style={{ color: "black", fontWeight: "bold" }}>
+                {userData?.displayName}
+              </li>
+              <li onClick={logout}>Logout</li>
+              <li>
+                <img
+                  src={userData?.image}
+                  style={{ width: "50px", borderRadius: "50%" }}
+                  alt=""
+                />
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          ):null}
+          {/* {user ? (
             <div className="dropdown">
               <button className="dropbtn">
                 <img
@@ -137,7 +214,7 @@ function Header() {
             <h1>
               <Link to="/LoginForm">LOGIN</Link>
             </h1>
-          )}
+          )} */}
         </div>
       </header>
     </div>
