@@ -120,9 +120,8 @@
 
 // export default Header;
 
-
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import ncu from "../Assets/ncu.png";
 import ncuDark from "../Assets/ncuDark.png"; // Import the dark mode logo
 import "../App.css";
@@ -131,6 +130,7 @@ import ToggleSwitch from "./ToggleSwitch";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 import axiosInstance from "./axios"; // Import axios instance
+import axios from "axios";
 
 function Header() {
   const [toggle, setToggle] = useState(false);
@@ -140,7 +140,7 @@ function Header() {
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   function reload() {
-    window.location.reload()
+    window.location.reload();
   }
   useEffect(() => {
     const handleResize = () => {
@@ -148,11 +148,8 @@ function Header() {
     };
     if (screenWidth > 900) {
       setToggle(true);
-    }
-     else setToggle(false);
+    } else setToggle(false);
     window.addEventListener("resize", handleResize);
-    console.log(toggle);
-    
   }, [window.innerWidth]);
 
   useEffect(() => {
@@ -180,7 +177,6 @@ function Header() {
 
     fetchUserData();
   }, []);
-
   const handleToggle = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -194,6 +190,30 @@ function Header() {
     }
   };
 
+  const [userdata, setUserdata] = useState({});
+
+  const getUser = async () => {
+    try {
+      const response = await axios.get("http://localhost:6005/login/sucess", {
+        withCredentials: true,
+      });
+
+      setUserdata(response.data.user);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  // logoout
+  const logout = () => {
+    window.open("http://localhost:6005/logout", "_self");
+  };
+  const loginwithgoogle = () => {
+    window.open("http://localhost:6005/auth/google/callback", "_self");
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <div>
       <div className="toogle-header">
@@ -245,7 +265,34 @@ function Header() {
           </label>
         </div>
         <div className="btns">
-          {user ? (
+          {Object?.keys(userdata)?.length > 0 ? (
+            <div className="google">
+              <li style={{ color: "black", fontWeight: "bold" }}>
+                {userdata?.displayName}
+              </li>
+              <button className="logout" onClick={logout}>Logout</button>
+              <li>
+                <img
+                  src={userdata?.image}
+                  style={{ width: "50px", borderRadius: "50%" }}
+                  alt=""
+                />
+              </li>
+            </div>
+          ) : (
+            <button
+              onClick={loginwithgoogle}
+              className="flex bg-gray-100 px-4 py-2 rounded-md gap-2 middle cursor-pointer"
+            >
+              <img
+                width={20}
+                src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
+                alt=""
+              />
+              <span> Sign in with Google</span>
+            </button>
+          )}
+          {/* {user ? (
             <div className="dropdown">
               <button className="dropbtn">
                 <img
@@ -265,7 +312,7 @@ function Header() {
             <h1>
               <Link to="/LoginForm">LOGIN</Link>
             </h1>
-          )}
+          )} */}
         </div>
       </header>
     </div>

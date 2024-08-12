@@ -1,3 +1,19 @@
+.google{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.google li{
+  list-style: none;
+}
+.logout{
+  background: #da2c2c;
+  border: #da2c2c;
+  border-radius: 5px;
+  padding:2px 5px;
+  color: white;
+}
 .toogle-header{
   background-color: #191e30;
   display: none;
