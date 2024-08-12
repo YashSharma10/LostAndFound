@@ -139,16 +139,21 @@ function Header() {
   const [imgUrl, setImgUrl] = useState(ncu);
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
+  function reload() {
+    window.location.reload()
+  }
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
     if (screenWidth > 900) {
       setToggle(true);
-    } else setToggle(false);
+    }
+     else setToggle(false);
     window.addEventListener("resize", handleResize);
-  }, [window.innerWidth,toggle]);
+    console.log(toggle);
+    
+  }, [window.innerWidth]);
 
   useEffect(() => {
     const bodyClass = document.body.classList;
@@ -208,19 +213,19 @@ function Header() {
         </div>
         <div className="head">
           <nav className="navbar">
-            <Link to="/Home" onClick={() => setToggle(!toggle)}>
+            <Link to="/Home" onClick={reload}>
               HOME
             </Link>
-            <Link to="/Lostitm" onClick={() => setToggle(!toggle)}>
+            <Link to="/Lostitm" onClick={reload}>
               LOST ITEMS
             </Link>
-            <Link to="/Founditm" onClick={() => setToggle(!toggle)}>
+            <Link to="/Founditm" onClick={reload}>
               FOUND ITEMS
             </Link>
-            <Link to="/Report" onClick={() => setToggle(!toggle)}>
+            <Link to="/Report" onClick={reload}>
               REPORT
             </Link>
-            <Link to="/Profile" onClick={() => setToggle(!toggle)}>
+            <Link to="/Profile" onClick={reload}>
               Profile
             </Link>
           </nav>
