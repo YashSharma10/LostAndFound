@@ -139,18 +139,18 @@ function Header() {
   const [imgUrl, setImgUrl] = useState(ncu);
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  function reload() {
-    window.location.reload();
-  }
+
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
     if (screenWidth > 900) {
       setToggle(true);
-    } else setToggle(false);
+    }
+    // if (screenWidth<900 ) setToggle(false);
     window.addEventListener("resize", handleResize);
-  }, [window.innerWidth]);
+    console.log(toggle);
+  }, [window.innerWidth, toggle]);
 
   useEffect(() => {
     const bodyClass = document.body.classList;
@@ -233,19 +233,19 @@ function Header() {
         </div>
         <div className="head">
           <nav className="navbar">
-            <Link to="/Home" onClick={reload}>
+            <Link to="/Home" onClick={() => setToggle(!toggle)}>
               HOME
             </Link>
-            <Link to="/Lostitm" onClick={reload}>
+            <Link to="/Lostitm" onClick={() => setToggle(!toggle)}>
               LOST ITEMS
             </Link>
-            <Link to="/Founditm" onClick={reload}>
+            <Link to="/Founditm" onClick={() => setToggle(!toggle)}>
               FOUND ITEMS
             </Link>
-            <Link to="/Report" onClick={reload}>
+            <Link to="/Report" onClick={() => setToggle(!toggle)}>
               REPORT
             </Link>
-            <Link to="/Profile" onClick={reload}>
+            <Link to="/Profile" onClick={() => setToggle(!toggle)}>
               Profile
             </Link>
           </nav>
@@ -270,7 +270,9 @@ function Header() {
               <li style={{ color: "black", fontWeight: "bold" }}>
                 {userdata?.displayName}
               </li>
-              <button className="logout" onClick={logout}>Logout</button>
+              <button className="logout" onClick={logout}>
+                Logout
+              </button>
               <li>
                 <img
                   src={userdata?.image}
