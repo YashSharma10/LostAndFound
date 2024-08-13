@@ -1,84 +1,123 @@
 import express from 'express';
+import cors from 'cors';
 import session from 'express-session';
-import MongoStore from 'connect-mongo';
 import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import connectDB from './db/connection.js';
+import { Strategy as OAuth2Strategy } from 'passport-google-oauth2';
+import connectMongo from 'connect-mongo';
+import mongoose from 'mongoose';
 import User from './models/User.js';
 
 const app = express();
+const PORT = 6005;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const clientid = '707051850826-eq1uv5b9nqosab9bgbqum5sfr30oaucj.apps.googleusercontent.com';
+const clientsecret = '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';
 
-// Setup session
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: 'mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound' })
-}));
+// Create MongoStore instance
+const MongoStore = connectMongo.create({
+  mongoUrl: 'mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound', // Update with your MongoDB URI
+  collectionName: 'sessions',
+});
 
-// Initialize Passport
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
+
+app.use(express.json({ limit: '16kb' }));
+app.use(express.urlencoded({ extended: true, limit: '16kb' }));
+app.use(express.static('public'));
+
+// Setup session middleware with expiration and max age
+app.use(
+  session({
+    secret: 'secretekey',
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore, // Use MongoStore instance here
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+      secure: false, // Set to true if using HTTPS
+      httpOnly: true, // Helps mitigate XSS attacks
+    },
+  })
+);
+
+// Setup passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new GoogleStrategy({
-  clientID: '707051850826-eq1uv5b9nqosab9bgbqum5sfr30oaucj.apps.googleusercontent.com',
-  clientSecret: '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',
-  callbackURL: 'http://localhost:6005/auth/google/callback'
-},
-async (accessToken, refreshToken, profile, done) => {
-  try {
-    let user = await User.findOne({ googleId: profile.id });
-    if (!user) {
-      user = new User({
-        googleId: profile.id,
-        displayName: profile.displayName,
-        image: profile._json.picture
-      });
-      await user.save();
+passport.use(
+  new OAuth2Strategy(
+    {
+      clientID: clientid,
+      clientSecret: clientsecret,
+      callbackURL: '/auth/google/callback',
+      scope: ['profile', 'email'],
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await User.findOne({ googleId: profile.id });
+        console.log(user);
+
+        if (!user) {
+          user = new User({
+            googleId: profile.id,
+            displayName: profile.displayName,
+            email: profile.emails[0].value,
+            image: profile.photos[0].value,
+          });
+
+          await user.save();
+        }
+
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
     }
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
-}));
+  )
+);
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
 
-// Routes
-app.get('/auth/google', passport.authenticate('google', {
-  scope: ['profile']
-}));
+// Initial Google OAuth login
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
 
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/profile');
-  });
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: 'http://localhost:5173',
+    failureRedirect: 'http://localhost:5173/login',
+  })
+);
 
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
-});
-
-app.get('/login/success', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json({ user: req.user });
+app.get('/login/success', async (req, res) => {
+  if (req.user) {
+    res.status(200).json({ message: 'user Login', user: req.user });
   } else {
-    res.status(401).json({ message: 'Not authenticated' });
+    res.status(400).json({ message: 'Not Authorized' });
   }
 });
-export {app}
+
+app.get('/logout', (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('http://localhost:5173');
+  });
+});
+
+export { app };

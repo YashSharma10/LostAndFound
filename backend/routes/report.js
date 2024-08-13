@@ -4,16 +4,7 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-const checkAuth = (req, res, next) => {
-  if (req.session && req.session.user) {
-    req.userId = req.session.user._id;
-    next();
-  } else {
-    res.status(401).json({ message: "Unauthorized" });
-  }
-};
-
-router.post("/lost", checkAuth, async (req, res) => {
+router.post("/lost", async (req, res) => {
   const { location, itemName, category, date, description, status, images } = req.body;
 
   try {
@@ -35,7 +26,7 @@ router.post("/lost", checkAuth, async (req, res) => {
   }
 });
 
-router.post("/found", checkAuth, async (req, res) => {
+router.post("/found", async (req, res) => {
   const { location, itemName, category, date, description, status, images } = req.body;
 
   try {

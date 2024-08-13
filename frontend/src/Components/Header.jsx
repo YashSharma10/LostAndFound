@@ -50,15 +50,15 @@ function Header() {
 
   const getUser = async () => {
     try {
-      const response = await axios.get("http://localhost:6005/login/sucess", {
+      const response = await axios.get("http://localhost:6005/login/success", {
         withCredentials: true,
       });
-
       setUserdata(response.data.user);
     } catch (error) {
       console.log("error", error);
     }
   };
+  
 
   // logoout
   const logout = () => {
