@@ -12,7 +12,7 @@ export default function Found() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:8000/api/reports/found", { withCredentials: true });
+        const response = await axios.get("http://localhost:6005/api/reports/found", { withCredentials: true });
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,6 +12,24 @@ export default function ReportForm() {
   const [date, setDate] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // Assume user is authenticated initially
+
+  // Check authentication status
+  useEffect(() => {
+    async function checkAuthStatus() {
+      try {
+        const response = await axios.get("http://localhost:6005/auth/status", { withCredentials: true });
+        console.log("Authentication Status:", response.data);
+        setIsAuthenticated(response.data.authenticated);
+      } catch (error) {
+        console.error("Error checking authentication status:", error);
+        setIsAuthenticated(false); // If there's an error, assume not authenticated
+      }
+    }
+  
+    checkAuthStatus();
+  }, []);
+  
 
   function clearForm() {
     setReportType("lost");
@@ -56,6 +74,11 @@ export default function ReportForm() {
   async function handleReport(e) {
     e.preventDefault();
 
+    if (!isAuthenticated) {
+      toast.error("You must be logged in to submit a report.");
+      return;
+    }
+
     if (!validateForm()) return;
 
     const report = {
@@ -69,8 +92,8 @@ export default function ReportForm() {
 
     const endpoint =
       reportType === "lost"
-        ? "http://localhost:8000/api/reports/lost"
-        : "http://localhost:8000/api/reports/found";
+        ? "http://localhost:6005/api/reports/lost"
+        : "http://localhost:6005/api/reports/found";
 
     try {
       await axios.post(endpoint, report, { withCredentials: true });
@@ -92,32 +115,30 @@ export default function ReportForm() {
               <label>
                 <input
                   type="radio"
-                  value="lost"
-                  checked={reportType === "lost"}
-                  onChange={() => setReportType("lost")}
-                />
-                Lost
-              </label>
-              <label>
-                <input
-                  type="radio"
                   value="found"
                   checked={reportType === "found"}
                   onChange={() => setReportType("found")}
                 />
                 Found
               </label>
+              <label>
+                <input
+                  type="radio"
+                  value="lost"
+                  checked={reportType === "lost"}
+                  onChange={() => setReportType("lost")}
+                />
+                Lost
+              </label>
             </div>
             <input
               type="text"
               value={itemName}
               placeholder="Item Name"
-              id="itemName"
               onChange={(e) => setItemName(e.target.value)}
               className="input"
             />
             <select
-              id="location"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="input"
@@ -132,7 +153,6 @@ export default function ReportForm() {
               <option value="cadLab">Cad Lab</option>
             </select>
             <select
-              id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="input"
@@ -150,12 +170,10 @@ export default function ReportForm() {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               type="date"
-              id="date"
               className="input"
             />
             <input
               type="file"
-              id="file"
               multiple
               onChange={handleImage}
               className="input"
@@ -163,7 +181,6 @@ export default function ReportForm() {
             <textarea
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
-              id="description"
               rows="5"
               className="textarea"
               placeholder="Add description..."

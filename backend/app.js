@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
-import { Strategy as OAuth2Strategy } from 'passport-google-oauth2';
 import connectMongo from 'connect-mongo';
-import mongoose from 'mongoose';
+import LostItemsRoutes from './routes/foundItem.js';
+import FoundItemsRoutes from './routes/lostItem.js';
 import User from './models/User.js';
+import { Strategy as OAuth2Strategy } from 'passport-google-oauth20';
+
 
 const app = express();
 const PORT = 6005;
@@ -15,7 +17,7 @@ const clientsecret = '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';
 
 // Create MongoStore instance
 const MongoStore = connectMongo.create({
-  mongoUrl: 'mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound', // Update with your MongoDB URI
+  mongoUrl: 'mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound',
   collectionName: 'sessions',
 });
 
@@ -30,17 +32,17 @@ app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
 
-// Setup session middleware with expiration and max age
+// Setup session middleware
 app.use(
   session({
     secret: 'secretekey',
     resave: false,
     saveUninitialized: true,
-    store: MongoStore, // Use MongoStore instance here
+    store: MongoStore,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
-      secure: false, // Set to true if using HTTPS
-      httpOnly: true, // Helps mitigate XSS attacks
+      secure: false,
+      httpOnly: true,
     },
   })
 );
@@ -60,7 +62,6 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ googleId: profile.id });
-        console.log(user);
 
         if (!user) {
           user = new User({
@@ -90,18 +91,12 @@ passport.deserializeUser((user, done) => {
 });
 
 // Initial Google OAuth login
-app.get(
-  '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get(
-  '/auth/google/callback',
-  passport.authenticate('google', {
-    successRedirect: 'http://localhost:5173',
-    failureRedirect: 'http://localhost:5173/login',
-  })
-);
+app.get('/auth/google/callback', passport.authenticate('google', {
+  successRedirect: 'http://localhost:5173',
+  failureRedirect: 'http://localhost:5173/login',
+}));
 
 app.get('/login/success', async (req, res) => {
   if (req.user) {
@@ -119,5 +114,18 @@ app.get('/logout', (req, res, next) => {
     res.redirect('http://localhost:5173');
   });
 });
+app.get('/auth/status', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ authenticated: true, user: req.user });
+  } else {
+    res.json({ authenticated: false });
+  }
+});
 
-export { app };
+
+
+// Use routes
+app.use('/api/reports/lost', LostItemsRoutes);
+app.use('/api/reports/found', FoundItemsRoutes);
+
+export {app}
