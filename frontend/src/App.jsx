@@ -8,7 +8,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Lostitm from './Pages/Lostitm';
 import Founditm from './Pages/Founditm';
 import Report from './Pages/Report';
-import LoginForm from './Pages/LoginForm';
 import Profile from './Pages/Profile';
 import Footer from './Components/Footer';
 import { ToastContainer } from 'react-toastify';
@@ -33,7 +32,6 @@ function App() {
             <Route path="/Lostitm" element={<Lostitm />} />
             <Route path="/Founditm" element={<Founditm />} />
             <Route path="/Report" element={<Report />} />
-            <Route path="/LoginForm" element={<LoginForm />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/" element={<Home />} />
           </Routes>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,23 +12,6 @@ export default function ReportForm() {
   const [date, setDate] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState([]);
-  const [user, setUser] = useState(null); // State to store user data
-
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/auth/getdata",
-          { withCredentials: true }
-        );
-        setUser(response.data.user);
-      } catch (error) {
-        toast.error("You need to be logged in to report an item.");
-      }
-    }
-
-    fetchUser();
-  }, []);
 
   function clearForm() {
     setReportType("lost");
@@ -72,11 +55,6 @@ export default function ReportForm() {
 
   async function handleReport(e) {
     e.preventDefault();
-
-    if (!user) {
-      toast.error("You need to be logged in to report an item.");
-      return;
-    }
 
     if (!validateForm()) return;
 

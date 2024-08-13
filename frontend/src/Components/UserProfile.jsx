@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import "./UserProfile.css";
 import { FaUser } from "react-icons/fa";
 
 export default function UserProfile() {
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    // Fetch user data from backend
-    axios.get("http://localhost:8000/api/auth/getdata", { withCredentials: true })
-      .then((response) => {
-        setUserData(response.data.user);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, []);
-
-  if (!userData) {
-    return <p>Loading...</p>;
-  }
+  // Assuming static or pre-loaded user data
+  const [userData] = useState({
+    name: "John Doe",
+    email: "john.doe@example.com",
+    posts: [
+      {
+        itemName: "Lost Wallet",
+        date: "2024-08-10",
+        location: "Cafe 1",
+      },
+      {
+        itemName: "Lost Keys",
+        date: "2024-08-08",
+        location: "Sport Room",
+      },
+    ],
+  });
 
   return (
     <div className="profile-container">
@@ -40,7 +40,7 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
-      
+
       <div className="posted-detail">
         <h3 className="posted-heading">Posted</h3>
         <table className="posts-table">

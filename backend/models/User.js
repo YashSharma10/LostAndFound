@@ -1,15 +1,10 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
-  displayName: String,
+const userSchema = new mongoose.Schema({
   googleId: String,
-  email: { type: String, unique: true },
-  image:String,
-  password: String,
-  role: { type: String, enum: ["user", "admin"], default: "user" },
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lost" }], // Reference to posts
+  displayName: String,
+  image: String,
 });
 
-const User = mongoose.model("User", UserSchema);
-
+const User = mongoose.model('User', userSchema);
 export default User;

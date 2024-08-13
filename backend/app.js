@@ -1,114 +1,84 @@
-import express from "express";
-import cors from "cors";
-import sessionMiddleware from "./middlewares/session.js";
-import routes from "./routes/index.js";
-import session from "express-session";
-import passport from "passport";
-import { Strategy as OAuth2Strategy } from "passport-google-oauth2";
-import User from "./models/User.js";
+import express from 'express';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import connectDB from './db/connection.js';
+import User from './models/User.js';
 
 const app = express();
-const PORT = 6005
-const clientid =
-  "707051850826-eq1uv5b9nqosab9bgbqum5sfr30oaucj.apps.googleusercontent.com";
-const clientsecret = "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";
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.json({ limit: "16kb" }));
-app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-app.use(express.static("public"));
+// Setup session
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: 'mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound' })
+}));
 
-app.use(sessionMiddleware);
-app.use("/api", routes);
-
-// setup session
-app.use(
-  session({
-    secret: "secretekey",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-// setuppassport
+// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(
-  new OAuth2Strategy(
-    {
-      clientID: clientid,
-      clientSecret: clientsecret,
-      callbackURL: "/auth/google/callback",
-      scope: ["profile", "email"],
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ googleId: profile.id });
-        console.log(user);
-        
-        if (!user) {
-          user = new User({
-            googleId: profile.id,
-            displayName: profile.displayName,
-            email: profile.emails[0].value,
-            image: profile.photos[0].value,
-          });
-
-          await user.save();
-        }
-
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
+passport.use(new GoogleStrategy({
+  clientID: '707051850826-eq1uv5b9nqosab9bgbqum5sfr30oaucj.apps.googleusercontent.com',
+  clientSecret: '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',
+  callbackURL: 'http://localhost:6005/auth/google/callback'
+},
+async (accessToken, refreshToken, profile, done) => {
+  try {
+    let user = await User.findOne({ googleId: profile.id });
+    if (!user) {
+      user = new User({
+        googleId: profile.id,
+        displayName: profile.displayName,
+        image: profile._json.picture
+      });
+      await user.save();
     }
-  )
-);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+}));
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, user.id);
 });
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
-// initial google ouath login
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: `http://localhost:5173`,
-    failureRedirect: `http://localhost:5173/login`,
-  })
-);
-
-app.get("/login/sucess", async (req, res) => {
-  if (req.user) {
-    res.status(200).json({ message: "user Login", user: req.user });
-  } else {
-    res.status(400).json({ message: "Not Authorized" });
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
   }
 });
 
-app.get("/logout", (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect(`http://localhost:5173`);
+// Routes
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile']
+}));
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/profile');
   });
+
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
 });
 
-export { app };
+app.get('/login/success', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ user: req.user });
+  } else {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+});
+export {app}

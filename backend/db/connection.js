@@ -1,15 +1,18 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+
+const connectionString = 'mongodb://localhost:27017/yourdbname';
 
 const connectDB = async () => {
   try {
-    const connectionInstance = await mongoose.connect("mongodb+srv://virtualid:DE4QJnveOhZ47Qji@cluster0.h4ntemz.mongodb.net", {
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-    });
-    console.log(`MongoDB connected: ${connectionInstance.connection.host}`);
+    if (mongoose.connection.readyState === 0) { // 0: disconnected
+      await mongoose.connect("mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound", {
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
+      });
+      console.log('MongoDB connected');
+    }
   } catch (error) {
-    console.error("MongoDB connection failed:", error);
-    process.exit(1);
+    console.error('Error connecting to MongoDB:', error);
   }
 };
 
