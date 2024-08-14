@@ -145,7 +145,7 @@ export default function Found() {
               <p className="itemDesc">{item.description}</p>
               <section className="itemInfo">
                 <section>
-                  <p>Status : {item.itemStatus}</p>
+                  <p>Status : {item.status}</p>
                   <p>Category : {item.category}</p>
                 </section>
                 <section>

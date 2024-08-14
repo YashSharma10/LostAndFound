@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const lostItemSchema = new mongoose.Schema({
   location: String,
@@ -6,8 +6,13 @@ const lostItemSchema = new mongoose.Schema({
   category: String,
   date: Date,
   description: String,
-  images: [String],
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference to the User model
+  status: {
+    type: String,
+    default: "unclaimed",
+    enum: ["unclaimed", "claimed"],
+  },
+  images: [{ type: String }], // Array of image URLs
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Reference to the User model
 });
 
-export default mongoose.model('LostItem', lostItemSchema);
+export default mongoose.model("LostItem", lostItemSchema);

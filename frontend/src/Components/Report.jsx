@@ -12,24 +12,20 @@ export default function ReportForm() {
   const [date, setDate] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Assume user is authenticated initially
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // Check authentication status
   useEffect(() => {
     async function checkAuthStatus() {
       try {
         const response = await axios.get("http://localhost:6005/auth/status", { withCredentials: true });
-        console.log("Authentication Status:", response.data);
         setIsAuthenticated(response.data.authenticated);
       } catch (error) {
-        console.error("Error checking authentication status:", error);
-        setIsAuthenticated(false); // If there's an error, assume not authenticated
+        setIsAuthenticated(false);
       }
     }
-  
     checkAuthStatus();
   }, []);
-  
 
   function clearForm() {
     setReportType("lost");
@@ -42,9 +38,7 @@ export default function ReportForm() {
   }
 
   function handleImage(e) {
-    const files = Array.from(e.target.files);
-    const imageUrls = files.map((file) => URL.createObjectURL(file));
-    setImages(imageUrls);
+    setImages(e.target.files);
   }
 
   function validateForm() {
@@ -81,22 +75,25 @@ export default function ReportForm() {
 
     if (!validateForm()) return;
 
-    const report = {
-      location,
-      itemName,
-      category,
-      date,
-      description: desc,
-      images,
-    };
+    const formData = new FormData();
+    formData.append('location', location);
+    formData.append('itemName', itemName);
+    formData.append('category', category);
+    formData.append('date', date);
+    formData.append('description', desc);
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
 
-    const endpoint =
-      reportType === "lost"
-        ? "http://localhost:6005/api/reports/lost"
-        : "http://localhost:6005/api/reports/found";
+    const endpoint = reportType === "lost"
+      ? "http://localhost:6005/api/reports/lost"
+      : "http://localhost:6005/api/reports/found";
 
     try {
-      await axios.post(endpoint, report, { withCredentials: true });
+      await axios.post(endpoint, formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       toast.success("Item reported successfully!");
       clearForm();
     } catch (error) {
@@ -183,36 +180,12 @@ export default function ReportForm() {
               onChange={(e) => setDesc(e.target.value)}
               rows="5"
               className="textarea"
-              placeholder="Add description..."
-            ></textarea>
-            {images.length > 0 && (
-              <div className="image-preview">
-                {images.map((image, index) => (
-                  <img key={index} src={image} alt={`preview ${index}`} />
-                ))}
-              </div>
-            )}
-            <div className="button-group">
-              <input
-                type="submit"
-                value="Submit"
-                className="button21 submit-button"
-              />
-              <input
-                type="button"
-                value="Cancel"
-                onClick={(e) => {
-                  e.preventDefault();
-                  clearForm();
-                }}
-                className="button21 cancel-button"
-              />
-            </div>
+              placeholder="Description"
+            />
+            <button type="submit" className="btn">
+              Submit
+            </button>
           </form>
-        </div>
-        <div className="balls21">
-          <div className="ball21 ballz1"></div>
-          <div className="ball21 ballz2"></div>
         </div>
       </div>
     </div>

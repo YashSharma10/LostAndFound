@@ -1,13 +1,21 @@
-import mongoose from 'mongoose';
+// models/FoundItem.js
+import mongoose from "mongoose";
 
 const foundItemSchema = new mongoose.Schema({
-  location: String,
-  itemName: String,
-  category: String,
-  date: Date,
-  description: String,
-  images: [String],
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference to the User model
+  location: { type: String, required: true },
+  itemName: { type: String, required: true },
+  category: { type: String, required: true },
+  date: { type: Date, required: true },
+  description: { type: String, required: true },
+  status: {
+    type: String,
+    default: "unclaimed",
+    enum: ["unclaimed", "claimed"],
+  },
+  images: [{ type: String }], // Array of image URLs
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
-export default mongoose.model('FoundItem', foundItemSchema);
+const FoundItem = mongoose.model("FoundItem", foundItemSchema);
+
+export default FoundItem;
