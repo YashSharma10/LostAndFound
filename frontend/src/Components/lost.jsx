@@ -12,7 +12,10 @@ export default function Found() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:6005/api/reports/lost", { withCredentials: true });
+        const response = await axios.get(
+          "http://localhost:6005/api/reports/lost",
+          { withCredentials: true }
+        );
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -32,7 +35,7 @@ export default function Found() {
 
   function handleSearch() {
     const searchLower = search.toLowerCase();
-    const searchResults = data.filter(item =>
+    const searchResults = data.filter((item) =>
       item.itemName.toLowerCase().includes(searchLower)
     );
     setFilteredData(searchResults);
@@ -42,7 +45,25 @@ export default function Found() {
     e.preventDefault();
     // Implement sorting logic if needed
   }
-
+  function handleClaim(itemId) {
+    axios
+      .put(
+        `http://localhost:6005/api/reports/lost/${itemId}`,
+        {},
+        { withCredentials: true }
+      )
+      .then((response) => {
+        // Update the state with the claimed item data
+        setData((prevData) =>
+          prevData.map((item) =>
+            item._id === itemId ? response.data.item : item
+          )
+        );
+      })
+      .catch((error) => {
+        console.error("Error claiming item:", error);
+      });
+  }
   return (
     <div className="container-lost">
       <div className="header-lost">
@@ -77,19 +98,11 @@ export default function Found() {
           <h1 className="search-btn">Specs</h1>
         </button>
         <button className="btn-lost">
-          <img
-            src="./src/Assets/image 21.png"
-            alt="Key"
-            className="img-btn"
-          />
+          <img src="./src/Assets/image 21.png" alt="Key" className="img-btn" />
           <h1 className="search-btn">Key</h1>
         </button>
         <button className="btn-lost">
-          <img
-            src="./src/Assets/image 29.png"
-            alt="Bag"
-            className="img-btn"
-          />
+          <img src="./src/Assets/image 29.png" alt="Bag" className="img-btn" />
           <h1 className="search-btn">Bag</h1>
         </button>
         <button className="btn-lost">
@@ -160,7 +173,20 @@ export default function Found() {
                   <p>Email ID : {item.email || "N/A"}</p>
                   <p>Phone NO : {item.phone || "N/A"}</p>
                 </section>
-                <button className="claimButton">Claim</button>
+                <section className="claimInfo">
+                  <section>
+                    <p>Claimed By : {item.claimedBy || "N/A"}</p>
+                    <p>Email ID : {item.email || "N/A"}</p>
+                  </section>
+                  {item.status !== "claimed" && (
+                    <button
+                      className="claimButton"
+                      onClick={() => handleClaim(item._id)}
+                    >
+                      Claim
+                    </button>
+                  )}
+                </section>
               </section>
             </section>
           </div>
