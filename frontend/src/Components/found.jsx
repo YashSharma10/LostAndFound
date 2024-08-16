@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import axios from "axios"; // Import axios to fetch data
+import axios from "axios";
 import "./Lost.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Found() {
   const [search, setSearch] = useState("Search Item");
   const [selectCategory, setSelectCategory] = useState("All");
   const [filteredData, setFilteredData] = useState([]);
   const [data, setData] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null); // State for current user
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:6005/api/reports/found", { withCredentials: true });
+        // Fetch lost items
+        const response = await axios.get(
+          "http://localhost:6005/api/reports/found",
+          { withCredentials: true }
+        );
         setData(response.data);
+
+        // Fetch current user data
+        const userResponse = await axios.get(
+          "http://localhost:6005/api/auth/user",
+          { withCredentials: true }
+        );
+        setCurrentUser(userResponse.data); // Store current user data
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -32,7 +46,7 @@ export default function Found() {
 
   function handleSearch() {
     const searchLower = search.toLowerCase();
-    const searchResults = data.filter(item =>
+    const searchResults = data.filter((item) =>
       item.itemName.toLowerCase().includes(searchLower)
     );
     setFilteredData(searchResults);
@@ -43,8 +57,62 @@ export default function Found() {
     // Implement sorting logic if needed
   }
 
+  function handleClaim(itemId) {
+    toast.warn(
+      "You must be a real user to claim items. Please confirm your action.",
+      {
+        position: "top-center",
+        autoClose: false,
+        closeOnClick: true,
+        draggable: true,
+        onClose: () => {
+          return;
+        },
+        onClick: () => {
+          axios
+            .put(
+              `http://localhost:6005/api/reports/found/itemId`,
+              { id: itemId },
+              { withCredentials: true }
+            )
+            .then((response) => {
+              if (response.status === 201) {
+                toast.success("Item claimed successfully!");
+                setData((prevData) =>
+                  prevData.map((item) =>
+                    item._id === itemId ? response.data.item : item
+                  )
+                );
+              }
+            })
+            .catch((error) => {
+              console.error("Error claiming item:", error);
+              toast.error("An error occurred while claiming the item.");
+            });
+        },
+      }
+    );
+  }
+
+  async function handleDelete(itemId) {
+    try {
+      const response = await axios.delete(
+        `http://localhost:6005/api/reports/item/${itemId}`,
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        toast.success("Item deleted successfully");
+        setData((prevData) => prevData.filter((item) => item._id !== itemId));
+      }
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      toast.error("An error occurred while deleting the item.");
+    }
+  }
+
   return (
     <div className="container-lost">
+      <ToastContainer />
       <div className="header-lost">
         <h1 className="found-title">Found Inventory</h1>
         <h6 className="subtitle">List of items that are Found</h6>
@@ -77,19 +145,11 @@ export default function Found() {
           <h1 className="search-btn">Specs</h1>
         </button>
         <button className="btn-lost">
-          <img
-            src="./src/Assets/image 21.png"
-            alt="Key"
-            className="img-btn"
-          />
+          <img src="./src/Assets/image 21.png" alt="Key" className="img-btn" />
           <h1 className="search-btn">Key</h1>
         </button>
         <button className="btn-lost">
-          <img
-            src="./src/Assets/image 29.png"
-            alt="Bag"
-            className="img-btn"
-          />
+          <img src="./src/Assets/image 29.png" alt="Bag" className="img-btn" />
           <h1 className="search-btn">Bag</h1>
         </button>
         <button className="btn-lost">
@@ -130,12 +190,12 @@ export default function Found() {
       <div className="itemList">
         {filteredData.map((item) => (
           <div
-            key={item._id} // Use unique identifier from your data
+            key={item._id}
             className={`itemCard ${item.dark ? "dark" : ""}`}
           >
             <section className="img-section">
               <img
-                src={item.images[0] || "./src/Assets/Rectangle 14.png"} // Display the first image or a placeholder
+                src={item.images[0] || "./src/Assets/Rectangle 14.png"}
                 className="itemImage"
                 alt="item"
               />
@@ -160,7 +220,25 @@ export default function Found() {
                   <p>Email ID : {item.email || "N/A"}</p>
                   <p>Phone NO : {item.phone || "N/A"}</p>
                 </section>
-                <button className="claimButton">Claim</button>
+                <section className="claimInfo">
+                  {item.status !== "claimed" && (
+                    <button
+                      className="claimButton"
+                      onClick={() => handleClaim(item._id)}
+                    >
+                      Claim
+                    </button>
+                  )}
+                </section>
+                {/* Add delete button if the logged-in user is the owner of the item */}
+                {currentUser && item.user === currentUser._id && (
+                  <button
+                    className="deleteButton"
+                    onClick={() => handleDelete(item._id)}
+                  >
+                    Delete
+                  </button>
+                )}
               </section>
             </section>
           </div>

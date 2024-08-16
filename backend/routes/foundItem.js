@@ -57,4 +57,29 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.put("/itemId", ensureAuthenticated, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const userId = req.user._id;
+    const userEmail = req.user.email;
+
+    // console.log(id, userEmail, userId);
+    const item = await FoundItem.findById(id);
+    // console.log(item, item.location);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    // Update the status to "claimed" and store the user email
+    item.status = "claimed";
+    item.claimedBy = req.user.displayName;
+    item.email = userEmail;
+    await item.save();
+
+    res.status(201).json({ message: "Item claimed successfully", item });
+  } catch (error) {
+    res.status(500).json({ message: "Error claiming item", error });
+  }
+});
+
 export default router;
