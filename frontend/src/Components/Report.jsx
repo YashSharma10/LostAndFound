@@ -182,10 +182,20 @@ export default function ReportForm() {
               className="textarea"
               placeholder="Description"
             />
-            <button type="submit" className="btn">
-              Submit
-            </button>
+            <div className="button-group">
+              <button type="button" className="button21 cancel-button" onClick={clearForm}>
+                Clear
+              </button>
+              <button type="submit" className="button21 submit-button">
+                Submit
+              </button>
+            </div>
           </form>
+        </div>
+        <div className="balls21">
+          <div className="ball21" style={{ width: '120px', height: '120px', top: '20%', left: '15%' }}></div>
+          <div className="ball21" style={{ width: '80px', height: '80px', top: '50%', left: '60%' }}></div>
+          <div className="ball21" style={{ width: '100px', height: '100px', top: '80%', left: '40%' }}></div>
         </div>
       </div>
     </div>
