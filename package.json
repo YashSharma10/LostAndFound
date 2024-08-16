@@ -21,6 +21,7 @@
     "express-session": "^1.18.0",
     "lostandfound": "file:",
     "mongoose": "^8.5.2",
+    "nodemon": "^3.1.4",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   }
