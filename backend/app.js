@@ -3,8 +3,8 @@ import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
 import connectMongo from 'connect-mongo';
-import LostItemsRoutes from './routes/foundItem.js';
-import FoundItemsRoutes from './routes/lostItem.js';
+import FoundItemsRoutes from './routes/foundItem.js';
+import LostItemsRoutes  from './routes/lostItem.js';
 import User from './models/User.js';
 import { Strategy as OAuth2Strategy } from 'passport-google-oauth20';
 

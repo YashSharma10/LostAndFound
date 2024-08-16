@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios"; // Import axios to fetch data
 import "./Lost.css";
+import { toast } from "react-toastify";
 
 export default function Found() {
   const [search, setSearch] = useState("Search Item");
@@ -46,19 +47,24 @@ export default function Found() {
     // Implement sorting logic if needed
   }
   function handleClaim(itemId) {
+    console.log(itemId);
     axios
       .put(
-        `http://localhost:6005/api/reports/lost/${itemId}`,
-        {},
+        `http://localhost:6005/api/reports/lost/itemId`,
+        { id: itemId },
         { withCredentials: true }
       )
       .then((response) => {
+        console.log(response);
         // Update the state with the claimed item data
-        setData((prevData) =>
-          prevData.map((item) =>
-            item._id === itemId ? response.data.item : item
-          )
-        );
+        if (response.status === 201) {
+          toast.success("Item claimed successfully!")
+          setData((prevData) =>
+            prevData.map((item) =>
+              item._id === itemId ? response.data.item : item
+            )
+          );
+        }
       })
       .catch((error) => {
         console.error("Error claiming item:", error);

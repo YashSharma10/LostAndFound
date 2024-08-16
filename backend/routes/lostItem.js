@@ -16,7 +16,8 @@ router.post(
   ensureAuthenticated,
   upload.array("images"),
   async (req, res) => {
-    const { location, itemName, category, date, description,status } = req.body;
+    const { location, itemName, category, date, description, status } =
+      req.body;
     const images = req.files; // Access uploaded files
 
     try {
@@ -49,6 +50,7 @@ router.post(
 
 // Route to get all lost items
 router.get("/", async (req, res) => {
+  // console.log("Frontedn daas");
   try {
     const lostItems = await LostItem.find().populate("user");
     res.status(200).json(lostItems);
@@ -57,28 +59,28 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.put("/:id", ensureAuthenticated, async (req, res) => {
+router.put("/itemId", ensureAuthenticated, async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
     const userId = req.user._id;
     const userEmail = req.user.email;
 
+    // console.log(id, userEmail, userId);
     const item = await LostItem.findById(id);
-
+    // console.log(item, item.location);
     if (!item) {
-      return res.status(404).json({ message: 'Item not found' });
+      return res.status(404).json({ message: "Item not found" });
     }
 
     // Update the status to "claimed" and store the user email
     item.status = "claimed";
     item.claimedBy = req.user.displayName;
-    item.email = email;
-
+    item.email = userEmail;
     await item.save();
 
-    res.status(200).json({ message: 'Item claimed successfully', item });
+    res.status(201).json({ message: "Item claimed successfully", item });
   } catch (error) {
-    res.status(500).json({ message: 'Error claiming item', error });
+    res.status(500).json({ message: "Error claiming item", error });
   }
 });
 
