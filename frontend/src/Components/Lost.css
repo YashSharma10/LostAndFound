@@ -5,7 +5,7 @@
 }
 
 .container-lost {
-  display: flex;
+  display: grid;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -123,18 +123,17 @@
 }
 
 .itemList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem; /* Maintain the gap between items */
-  max-width: 100%; /* Ensure items don't exceed the container width */
-  margin-top: 1rem;
-  justify-content: center; /* Center-align items within the container */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3 columns in a row */
+  gap: 1.5rem; /* Gap between the items */
+  width: 100%; /* Full width */
+  justify-items: center; /* Center-align items */
+  margin-top: 1rem; /* Added margin at the top */
 }
 
 .itemCard {
   display: flex;
-  flex-direction: row; /* Ensure cards are laid out in a row */
-  word-wrap:inherit;
+  flex-direction: column; /* Ensure cards are laid out in a column */
   gap: 1.5rem; /* Maintain the gap between content within the card */
   color: #333; /* Darker text color */
   background: rgba(255, 136, 0, 0.2); /* Slightly lighter background */
@@ -144,10 +143,8 @@
   border-radius: 0.75rem; /* Adjusted border-radius */
   padding: 1rem; /* Increased padding */
   transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
-  flex: 1 1 300px; /* Grow and shrink with a base width of 300px */
-  max-width: 100%; /* Ensure cards do not exceed the container width */
+  width: 100%; /* Full width within the grid */
 }
-
 
 .itemCard:hover {
   transform: translateY(-5px); /* Slight lift on hover */
@@ -155,13 +152,13 @@
 }
 
 .itemImage {
-  width: 500px; /* Increased width */
+  width: 100%; /* Make image width responsive */
   border-radius: 0.75rem; /* Adjusted border-radius */
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px; /* Slightly larger shadow */
 }
 
 .itemDetails {
-  max-width: 350px; /* Increased max-width */
+  max-width: 100%; /* Ensure details don't overflow */
 }
 
 .itemTitle {
@@ -224,17 +221,29 @@ p.dark {
 }
 
 @media (max-width: 768px) {
+  .itemList {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+  }
+
   .itemCard {
     flex-direction: column;
     align-items: center; /* Center-align items */
   }
+
   .img-section {
     display: flex;
     justify-content: center;
     width: 100%; /* Full width on smaller screens */
   }
+
   .itemTitle,
   .itemDesc {
     margin: 1rem; /* Increased margin for readability */
+  }
+}
+
+@media (max-width: 480px) {
+  .itemList {
+    grid-template-columns: 1fr; /* 1 column on very small screens */
   }
 }
