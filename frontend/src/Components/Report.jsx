@@ -193,9 +193,9 @@ export default function ReportForm() {
           </form>
         </div>
         <div className="balls21">
-          <div className="ball21" style={{ width: '120px', height: '120px', top: '20%', left: '15%' }}></div>
-          <div className="ball21" style={{ width: '80px', height: '80px', top: '50%', left: '60%' }}></div>
-          <div className="ball21" style={{ width: '100px', height: '100px', top: '80%', left: '40%' }}></div>
+          <div className="ball21" style={{ width: '120px', height: '120px', top: '20%', left: '15%' , backgroundColor:'rgba(122, 28, 172, 0.929)' }}></div>
+          <div className="ball21" style={{ width: '80px', height: '80px', top: '50%', left: '60%', backgroundColor:'rgba(12, 28, 102, 0.929)' }}></div>
+          <div className="ball21" style={{ width: '100px', height: '100px', top: '80%', left: '40%', backgroundColor:'rgba(217, 59, 172, 0.929)' }}></div>
         </div>
       </div>
     </div>
