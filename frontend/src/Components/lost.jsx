@@ -138,23 +138,23 @@ export default function Found() {
       <div className="buttonContainer">
         <button className="btn-lost">
           <img
-            src="./src/Assets/image 20.png"
+            src="./src/Assets/icons8-sun-glasses-72.png"
             alt="Specs"
             className="img-btn"
           />
           <h1 className="search-btn">Specs</h1>
         </button>
         <button className="btn-lost">
-          <img src="./src/Assets/image 21.png" alt="Key" className="img-btn" />
+          <img src="./src/Assets/icons8-key-74.png" alt="Key" className="img-btn" />
           <h1 className="search-btn">Key</h1>
         </button>
         <button className="btn-lost">
-          <img src="./src/Assets/image 29.png" alt="Bag" className="img-btn" />
+          <img src="./src/Assets/icons8-bag-74.png" alt="Bag" className="img-btn" />
           <h1 className="search-btn">Bag</h1>
         </button>
         <button className="btn-lost">
           <img
-            src="./src/Assets/image 31.png"
+            src="./src/Assets/icons8-phone-74.png"
             alt="Mobile"
             className="img-btn"
           />
@@ -162,7 +162,7 @@ export default function Found() {
         </button>
         <button className="btn-lost">
           <img
-            src="./src/Assets/image 37.png"
+            src="./src/Assets/icons8-purse-74.png"
             alt="Purse"
             className="img-btn"
           />
