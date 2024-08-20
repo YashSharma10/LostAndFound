@@ -4,8 +4,10 @@ import axios from "axios";
 import "./Lost.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useGlobalContext } from "../context/GlobalContextProvider";
 
 export default function Found() {
+  const {globalBackendUrl} = useGlobalContext()
   const [search, setSearch] = useState("Search Item");
   const [selectCategory, setSelectCategory] = useState("All");
   const [filteredData, setFilteredData] = useState([]);
@@ -17,14 +19,14 @@ export default function Found() {
       try {
         // Fetch lost items
         const response = await axios.get(
-          "http://localhost:6005/api/reports/found",
+          `${globalBackendUrl}/api/reports/found`,
           { withCredentials: true }
         );
         setData(response.data);
 
         // Fetch current user data
         const userResponse = await axios.get(
-          "http://localhost:6005/api/auth/user",
+          `${globalBackendUrl}/api/auth/user`,
           { withCredentials: true }
         );
         setCurrentUser(userResponse.data); // Store current user data
@@ -71,7 +73,7 @@ export default function Found() {
         onClick: () => {
           axios
             .put(
-              `http://localhost:6005/api/reports/found/itemId`,
+              `${globalBackendUrl}/api/reports/found/itemId`,
               { id: itemId },
               { withCredentials: true }
             )
@@ -97,7 +99,7 @@ export default function Found() {
   async function handleDelete(itemId) {
     try {
       const response = await axios.delete(
-        `http://localhost:6005/api/reports/item/${itemId}`,
+        `${globalBackendUrl}/api/reports/item/${itemId}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

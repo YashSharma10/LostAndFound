@@ -3,8 +3,10 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./ReportForm.css";
+import { useGlobalContext } from "../context/GlobalContextProvider";
 
 export default function ReportForm() {
+  const {globalBackendUrl} = useGlobalContext()
   const [reportType, setReportType] = useState("lost");
   const [location, setLocation] = useState("Location");
   const [itemName, setItemName] = useState("");
@@ -17,7 +19,7 @@ export default function ReportForm() {
   useEffect(() => {
     async function checkAuthStatus() {
       try {
-        const response = await axios.get("http://localhost:6005/auth/status", { withCredentials: true });
+        const response = await axios.get(`${globalBackendUrl}/auth/status`, { withCredentials: true });
         setIsAuthenticated(response.data.authenticated);
       } catch (error) {
         setIsAuthenticated(false);
@@ -85,8 +87,8 @@ export default function ReportForm() {
     }
 
     const endpoint = reportType === "lost"
-      ? "http://localhost:6005/api/reports/lost"
-      : "http://localhost:6005/api/reports/found";
+      ? `${globalBackendUrl}/api/reports/lost`
+      : `${globalBackendUrl}/api/reports/found`;
 
     try {
       await axios.post(endpoint, formData, {

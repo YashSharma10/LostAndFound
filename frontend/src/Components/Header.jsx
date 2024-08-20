@@ -14,8 +14,6 @@ import { useGlobalContext } from "../context/GlobalContextProvider";
 
 function Header() {
   const {globalBackendUrl} = useGlobalContext()
-  console.log(globalBackendUrl);
-  
   const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState(null); // User state, initially null
   const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
@@ -54,7 +52,7 @@ function Header() {
 
   const getUser = async () => {
     try {
-      const response = await axios.get("http://localhost:6005/login/success", {
+      const response = await axios.get(`${globalBackendUrl}/login/success`, {
         withCredentials: true,
       });
       setUserdata(response.data.user);
@@ -66,10 +64,10 @@ function Header() {
 
   // logoout
   const logout = () => {
-    window.open("http://localhost:6005/logout", "_self");
+    window.open(`${globalBackendUrl}/logout`, "_self");
   };
   const loginwithgoogle = () => {
-    window.open("http://localhost:6005/auth/google/callback", "_self");
+    window.open(`${globalBackendUrl}/auth/google/callback`, "_self");
   };
   useEffect(() => {
     getUser();
