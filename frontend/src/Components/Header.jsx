@@ -10,8 +10,12 @@ import { RxHamburgerMenu } from "react-icons/rx";
 
 import axiosInstance from "./axios"; // Import axios instance
 import axios from "axios";
+import { useGlobalContext } from "../context/GlobalContextProvider";
 
 function Header() {
+  const {globalBackendUrl} = useGlobalContext()
+  console.log(globalBackendUrl);
+  
   const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState(null); // User state, initially null
   const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
