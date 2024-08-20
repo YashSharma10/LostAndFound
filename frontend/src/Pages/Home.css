@@ -90,6 +90,7 @@ gap: 30px;
 
 @media (max-width: 768px) {
   .instructions {
+    margin-top: 20px;
     padding: 20px;
   }
 

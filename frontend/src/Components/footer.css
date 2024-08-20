@@ -290,9 +290,3 @@ body.dark .btn_get_two:hover {
   background: transparent;
   color: #019da5;
 }
-
-@media (max-width: 768px) {
-  .new_footer_area {
-    margin-top: 450px;
-  }
-}
