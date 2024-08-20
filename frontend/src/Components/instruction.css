@@ -45,7 +45,10 @@
   
   @media (max-width: 768px) {
     .instructions {
-      padding: 20px;
+        padding: 20px;
+        position: relative;
+        top: 90px;
+        max-width: 350px;
     }
   
     .instruction-card {
