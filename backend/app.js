@@ -12,8 +12,8 @@ import { Strategy as OAuth2Strategy } from 'passport-google-oauth20';
 const app = express();
 const PORT = 6005;
 
-const clientid = '860312032073-c36hsakqsjm68hms164ug40ron6278c4.apps.googleusercontent.com';
-const clientsecret = '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';
+const clientid = process.env.GOOGLE_CLIENT_ID;
+const clientsecret = GOOGLE_CLIENT_SECREAT;
 
 // Create MongoStore instance
 const MongoStore = connectMongo.create({
