@@ -102,8 +102,8 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: `${globalURL}`,
-    failureRedirect: `${globalURL}/login`,
+    successRedirect: "https://lostandfound-1.onrender.com",
+    failureRedirect: "https://lostandfound-1.onrender.com/login",
   })
 );
 
