@@ -59,7 +59,7 @@ passport.use(
     {
       clientID: "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "https://lostandfound-1.onrender.com/auth/google/callback",
+      callbackURL: "https://lostandfound-40ek.onrender.com/auth/google/callback",
       scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
