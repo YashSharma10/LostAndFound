@@ -57,8 +57,8 @@ app.use(passport.session());
 passport.use(
   new OAuth2Strategy(
     {
-      clientID: clientid,
-      clientSecret: clientsecret,
+      clientID: "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com",
+      clientSecret: "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",
       callbackURL: "https://lostandfound-1.onrender.com/auth/google/callback",
       scope: ["profile", "email"],
     },
