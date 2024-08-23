@@ -138,7 +138,7 @@ export default function Found() {
           </span>
         </form>
       </div>
-      <div className="buttonContainer">
+      {/* <div className="buttonContainer">
         <button className="btn-lost">
           <img
             src="./src/Assets/icons8-sun-glasses-72.png"
@@ -171,7 +171,7 @@ export default function Found() {
           />
           <h1 className="search-btn">Purse</h1>
         </button>
-      </div>
+      </div> */}
       <div className="divider"></div>
       <section className="sortForm">
         <form onSubmit={sortItem}>
