@@ -90,7 +90,7 @@ export default function Found() {
             })
             .catch((error) => {
               console.error("Error claiming item:", error);
-              toast.error("An error occurred while claiming the item.");
+              toast.error("Login to claim an item");
             });
         },
       }
