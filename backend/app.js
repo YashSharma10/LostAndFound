@@ -23,10 +23,12 @@ const MongoStore = connectMongo.create({
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://lostandfound-1.onrender.com',
     credentials: true,
   })
 );
+
+const globalURL = "https://lostandfound-1.onrender.com";
 
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
@@ -94,8 +96,8 @@ passport.deserializeUser((user, done) => {
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: 'http://localhost:5173',
-  failureRedirect: 'http://localhost:5173/login',
+  successRedirect: `${globalURL}`,
+  failureRedirect: `${globalURL}/login`,
 }));
 
 app.get('/login/success', async (req, res) => {
@@ -111,7 +113,7 @@ app.get('/logout', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect('http://localhost:5173');
+    res.redirect(`${globalURL}`);
   });
 });
 app.get('/auth/status', (req, res) => {
