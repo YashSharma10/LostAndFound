@@ -30,7 +30,7 @@ app.use(
   })
 );
 
-const globalURL = "https://lostandfound-1.onrender.com";
+const globalURL = "https://lostandfound-40ek.onrender.com";
 
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
