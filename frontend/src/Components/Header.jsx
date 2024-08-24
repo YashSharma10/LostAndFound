@@ -104,7 +104,7 @@ function Header() {
               REPORT
             </Link>
             <Link to="/Profile" onClick={() => setToggle(!toggle)}>
-              Profile
+              PROFILE
             </Link>
           </nav>
         </div>

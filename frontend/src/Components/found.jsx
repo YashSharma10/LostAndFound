@@ -131,6 +131,7 @@ export default function Found() {
               value={search}
               placeholder={search}
               onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setSearch("")}
               id="search"
               className="inputBox"
             />
