@@ -138,40 +138,6 @@ export default function Found() {
           </span>
         </form>
       </div>
-      <div className="buttonContainer">
-        <button className="btn-lost">
-          <img
-            src="./src/Assets/icons8-sun-glasses-72.png"
-            alt="Specs"
-            className="img-btn"
-          />
-          <h1 className="search-btn">Specs</h1>
-        </button>
-        <button className="btn-lost">
-          <img src="./src/Assets/icons8-key-74.png" alt="Key" className="img-btn" />
-          <h1 className="search-btn">Key</h1>
-        </button>
-        <button className="btn-lost">
-          <img src="./src/Assets/icons8-bag-74.png" alt="Bag" className="img-btn" />
-          <h1 className="search-btn">Bag</h1>
-        </button>
-        <button className="btn-lost">
-          <img
-            src="./src/Assets/icons8-phone-74.png"
-            alt="Mobile"
-            className="img-btn"
-          />
-          <h1 className="search-btn">Mobile</h1>
-        </button>
-        <button className="btn-lost">
-          <img
-            src="./src/Assets/icons8-purse-74.png"
-            alt="Purse"
-            className="img-btn"
-          />
-          <h1 className="search-btn">Purse</h1>
-        </button>
-      </div>
       <div className="divider"></div>
       <section className="sortForm">
         <form onSubmit={sortItem}>
