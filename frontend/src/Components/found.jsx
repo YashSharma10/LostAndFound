@@ -7,7 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useGlobalContext } from "../context/GlobalContextProvider";
 
 export default function Found() {
-  const {globalBackendUrl} = useGlobalContext()
+
+  const { globalBackendUrl } = useGlobalContext();
   const [search, setSearch] = useState("Search Item");
   const [selectCategory, setSelectCategory] = useState("All");
   const [filteredData, setFilteredData] = useState([]);
@@ -36,7 +37,7 @@ export default function Found() {
     }
 
     fetchData();
-  }, []);
+  }, [globalBackendUrl]);
 
   useEffect(() => {
     setFilteredData(
@@ -73,7 +74,7 @@ export default function Found() {
         onClick: () => {
           axios
             .put(
-              `${globalBackendUrl}/api/reports/found/itemId`,
+              `${globalBackendUrl}/api/reports/found/${itemId}`,
               { id: itemId },
               { withCredentials: true }
             )
@@ -137,7 +138,7 @@ export default function Found() {
           </span>
         </form>
       </div>
-      {/* <div className="buttonContainer">
+      <div className="buttonContainer">
         <button className="btn-lost">
           <img
             src="./src/Assets/icons8-sun-glasses-72.png"
@@ -170,7 +171,7 @@ export default function Found() {
           />
           <h1 className="search-btn">Purse</h1>
         </button>
-      </div> */}
+      </div>
       <div className="divider"></div>
       <section className="sortForm">
         <form onSubmit={sortItem}>
@@ -212,7 +213,7 @@ export default function Found() {
                 </section>
                 <section>
                   <p>Location : {item.location}</p>
-                  <p>Date Lost : {item.date}</p>
+                  <p>Date Found : {item.date}</p>
                 </section>
               </section>
               <section className="dividerSmall"></section>
@@ -223,7 +224,7 @@ export default function Found() {
                   <p>Phone NO : {item.phone || "N/A"}</p>
                 </section>
                 <section className="claimInfo">
-                  {item.status !== "claimed" && (
+                  {item.status !== "claimed" && currentUser && item.user !== currentUser._id && (
                     <button
                       className="claimButton"
                       onClick={() => handleClaim(item._id)}
