@@ -12,9 +12,9 @@ const app = express();
 const PORT = 6005;
 
 // Replace with your actual credentials
-const clientID =
+const clientid =
   "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com";
-const clientSecret = "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";
+const clientsecret = "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";
 
 // Create MongoStore instance
 const MongoStore = connectMongo.create({
@@ -29,8 +29,6 @@ app.use(
     credentials: true,
   })
 );
-
-const globalURL = "https://lostandfound-40ek.onrender.com";
 
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
@@ -58,10 +56,9 @@ app.use(passport.session());
 passport.use(
   new OAuth2Strategy(
     {
-      clientID: clientID,
-      clientSecret: clientSecret,
-      callbackURL:
-        `${globalURL}/auth/google/callback`,
+      clientID: clientid,
+      clientSecret: clientsecret,
+      callbackURL: '/auth/google/callback',
       scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -97,22 +94,21 @@ passport.deserializeUser((user, done) => {
 
 // Initial Google OAuth login
 app.get(
-  `${globalURL}/auth/google`,
+  '/auth/google',
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 // Google OAuth callback
 app.get(
-  `${globalURL}/auth/google/callback`,
+  '/auth/google/callback',
   passport.authenticate("google", {
-    successRedirect: globalURL,
+    successRedirect: "https://lostandfound-1.onrender.com",
     failureRedirect: "/login",
   })
 );
 
-
 // Login success
-app.get(`${globalURL}/login/success`, (req, res) => {
+app.get('/login/success', (req, res) => {
   if (req.user) {
     res.status(200).json({ message: "User logged in", user: req.user });
   } else {
@@ -120,9 +116,8 @@ app.get(`${globalURL}/login/success`, (req, res) => {
   }
 });
 
-
 // Logout
-app.get(`${globalURL}/logout`, (req, res, next) => {
+app.get('/logout', (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
@@ -132,7 +127,7 @@ app.get(`${globalURL}/logout`, (req, res, next) => {
 });
 
 // Check authentication status
-app.get(`${globalURL}/auth/status`, (req, res) => {
+app.get('/auth/status', (req, res) => {
   if (req.isAuthenticated()) {
     res.json({ authenticated: true, user: req.user });
   } else {
