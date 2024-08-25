@@ -1,41 +1,45 @@
-import express from 'express';
-import cors from 'cors';
-import session from 'express-session';
-import passport from 'passport';
-import connectMongo from 'connect-mongo';
-import FoundItemsRoutes from './routes/foundItem.js';
-import LostItemsRoutes  from './routes/lostItem.js';
-import User from './models/User.js';
-import { Strategy as OAuth2Strategy } from 'passport-google-oauth20';
-
+import express from "express";
+import cors from "cors";
+import session from "express-session";
+import passport from "passport";
+import connectMongo from "connect-mongo";
+import FoundItemsRoutes from "./routes/foundItem.js";
+import LostItemsRoutes from "./routes/lostItem.js";
+import User from "./models/User.js";
+import { Strategy as OAuth2Strategy } from "passport-google-oauth20";
 
 const app = express();
 const PORT = 6005;
 
-const clientid = '707051850826-eq1uv5b9nqosab9bgbqum5sfr30oaucj.apps.googleusercontent.com';
-const clientsecret = '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';
+// Replace with your actual credentials
+const clientID =
+  "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com";
+const clientSecret = "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";
 
 // Create MongoStore instance
 const MongoStore = connectMongo.create({
-  mongoUrl: 'mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound',
-  collectionName: 'sessions',
+  mongoUrl:
+    "mongodb+srv://yash22csu295:12345@lostandfound.wgyek.mongodb.net/?retryWrites=true&w=majority&appName=LostAndFound",
+  collectionName: "sessions",
 });
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: "https://lostandfound-1.onrender.com",
     credentials: true,
   })
 );
 
-app.use(express.json({ limit: '16kb' }));
-app.use(express.urlencoded({ extended: true, limit: '16kb' }));
-app.use(express.static('public'));
+const globalURL = "https://lostandfound-40ek.onrender.com";
+
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.static("public"));
 
 // Setup session middleware
 app.use(
   session({
-    secret: 'secretekey',
+    secret: "secretekey",
     resave: false,
     saveUninitialized: true,
     store: MongoStore,
@@ -54,10 +58,11 @@ app.use(passport.session());
 passport.use(
   new OAuth2Strategy(
     {
-      clientID: clientid,
-      clientSecret: clientsecret,
-      callbackURL: '/auth/google/callback',
-      scope: ['profile', 'email'],
+      clientID: clientID,
+      clientSecret: clientSecret,
+      callbackURL:
+        `${globalURL}/auth/google/callback`,
+      scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -91,30 +96,43 @@ passport.deserializeUser((user, done) => {
 });
 
 // Initial Google OAuth login
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get(
+  `${globalURL}/auth/google`,
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
-app.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: 'http://localhost:5173',
-  failureRedirect: 'http://localhost:5173/login',
-}));
+// Google OAuth callback
+app.get(
+  `${globalURL}/auth/google/callback`,
+  passport.authenticate("google", {
+    successRedirect: globalURL,
+    failureRedirect: "/login",
+  })
+);
 
-app.get('/login/success', async (req, res) => {
+
+// Login success
+app.get(`${globalURL}/login/success`, (req, res) => {
   if (req.user) {
-    res.status(200).json({ message: 'user Login', user: req.user });
+    res.status(200).json({ message: "User logged in", user: req.user });
   } else {
-    res.status(400).json({ message: 'Not Authorized' });
+    res.status(400).json({ message: "Not Authorized" });
   }
 });
 
-app.get('/logout', (req, res, next) => {
+
+// Logout
+app.get(`${globalURL}/logout`, (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
     }
-    res.redirect('http://localhost:5173');
+    res.redirect(globalURL);
   });
 });
-app.get('/auth/status', (req, res) => {
+
+// Check authentication status
+app.get(`${globalURL}/auth/status`, (req, res) => {
   if (req.isAuthenticated()) {
     res.json({ authenticated: true, user: req.user });
   } else {
@@ -122,10 +140,8 @@ app.get('/auth/status', (req, res) => {
   }
 });
 
-
-
 // Use routes
-app.use('/api/reports/lost', LostItemsRoutes);
-app.use('/api/reports/found', FoundItemsRoutes);
+app.use("/api/reports/lost", LostItemsRoutes);
+app.use("/api/reports/found", FoundItemsRoutes);
 
-export {app}
+export { app };

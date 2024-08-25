@@ -4,8 +4,10 @@ import axios from "axios";
 import "./Lost.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useGlobalContext } from "../context/GlobalContextProvider";
 
 export default function Found() {
+  const { globalBackendUrl } = useGlobalContext();
   const [search, setSearch] = useState("Search Item");
   const [selectCategory, setSelectCategory] = useState("All");
   const [filteredData, setFilteredData] = useState([]);
@@ -17,14 +19,14 @@ export default function Found() {
       try {
         // Fetch lost items
         const response = await axios.get(
-          "http://localhost:6005/api/reports/found",
+          `${globalBackendUrl}/api/reports/found`,
           { withCredentials: true }
         );
         setData(response.data);
 
         // Fetch current user data
         const userResponse = await axios.get(
-          "http://localhost:6005/api/auth/user",
+          `${globalBackendUrl}/api/auth/user`,
           { withCredentials: true }
         );
         setCurrentUser(userResponse.data); // Store current user data
@@ -34,7 +36,7 @@ export default function Found() {
     }
 
     fetchData();
-  }, []);
+  }, [globalBackendUrl]);
 
   useEffect(() => {
     setFilteredData(
@@ -71,7 +73,7 @@ export default function Found() {
         onClick: () => {
           axios
             .put(
-              `http://localhost:6005/api/reports/found/itemId`,
+              `${globalBackendUrl}/api/reports/found/${itemId}`,
               { id: itemId },
               { withCredentials: true }
             )
@@ -97,7 +99,7 @@ export default function Found() {
   async function handleDelete(itemId) {
     try {
       const response = await axios.delete(
-        `http://localhost:6005/api/reports/item/${itemId}`,
+        `${globalBackendUrl}/api/reports/item/${itemId}`,
         { withCredentials: true }
       );
       if (response.status === 200) {
@@ -128,46 +130,13 @@ export default function Found() {
               value={search}
               placeholder={search}
               onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setSearch("")}
               id="search"
               className="inputBox"
             />
             <FaSearch onClick={handleSearch} />
           </span>
         </form>
-      </div>
-      <div className="buttonContainer">
-        <button className="btn-lost">
-          <img
-            src="./src/Assets/icons8-sun-glasses-72.png"
-            alt="Specs"
-            className="img-btn"
-          />
-          <h1 className="search-btn">Specs</h1>
-        </button>
-        <button className="btn-lost">
-          <img src="./src/Assets/icons8-key-74.png" alt="Key" className="img-btn" />
-          <h1 className="search-btn">Key</h1>
-        </button>
-        <button className="btn-lost">
-          <img src="./src/Assets/icons8-bag-74.png" alt="Bag" className="img-btn" />
-          <h1 className="search-btn">Bag</h1>
-        </button>
-        <button className="btn-lost">
-          <img
-            src="./src/Assets/icons8-phone-74.png"
-            alt="Mobile"
-            className="img-btn"
-          />
-          <h1 className="search-btn">Mobile</h1>
-        </button>
-        <button className="btn-lost">
-          <img
-            src="./src/Assets/icons8-purse-74.png"
-            alt="Purse"
-            className="img-btn"
-          />
-          <h1 className="search-btn">Purse</h1>
-        </button>
       </div>
       <div className="divider"></div>
       <section className="sortForm">
@@ -189,10 +158,7 @@ export default function Found() {
       </section>
       <div className="itemList">
         {filteredData.map((item) => (
-          <div
-            key={item._id}
-            className={`itemCard ${item.dark ? "dark" : ""}`}
-          >
+          <div key={item._id} className={`itemCard ${item.dark ? "dark" : ""}`}>
             <section className="img-section">
               <img
                 src={item.images[0] || "./src/Assets/Rectangle 14.png"}
@@ -210,7 +176,14 @@ export default function Found() {
                 </section>
                 <section>
                   <p>Location : {item.location}</p>
-                  <p>Date Lost : {item.date}</p>
+                  <p>
+                    Date Lost :{" "}
+                    {new Date(item.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
                 </section>
               </section>
               <section className="dividerSmall"></section>
@@ -221,14 +194,16 @@ export default function Found() {
                   <p>Phone NO : {item.phone || "N/A"}</p>
                 </section>
                 <section className="claimInfo">
-                  {item.status !== "claimed" && (
-                    <button
-                      className="claimButton"
-                      onClick={() => handleClaim(item._id)}
-                    >
-                      Claim
-                    </button>
-                  )}
+                  {item.status !== "claimed" &&
+                    currentUser &&
+                    item.user !== currentUser._id && (
+                      <button
+                        className="claimButton"
+                        onClick={() => handleClaim(item._id)}
+                      >
+                        Claim
+                      </button>
+                    )}
                 </section>
                 {/* Add delete button if the logged-in user is the owner of the item */}
                 {currentUser && item.user === currentUser._id && (

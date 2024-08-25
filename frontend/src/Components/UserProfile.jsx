@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaUser } from "react-icons/fa";
 import "./UserProfile.css";
+import { useGlobalContext } from "../context/GlobalContextProvider";
 
 export default function UserProfile() {
+  const {globalBackendUrl} = useGlobalContext()
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // Add error state
@@ -11,7 +13,7 @@ export default function UserProfile() {
   useEffect(() => {
     // Fetch user data from the backend
     axios
-      .get("http://localhost:6005/login/success", { withCredentials: true })
+      .get(`${globalBackendUrl}/login/success`, { withCredentials: true })
       .then((response) => {
         console.log("User data:", response.data); // Debugging statement
         setUserData(response.data.user);
