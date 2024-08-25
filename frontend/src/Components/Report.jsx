@@ -117,7 +117,7 @@ export default function ReportForm() {
                   checked={reportType === "found"}
                   onChange={() => setReportType("found")}
                 />
-                Found
+                <p>Found</p>
               </label>
               <label>
                 <input
@@ -126,7 +126,7 @@ export default function ReportForm() {
                   checked={reportType === "lost"}
                   onChange={() => setReportType("lost")}
                 />
-                Lost
+                <p>Lost</p>
               </label>
             </div>
             <input

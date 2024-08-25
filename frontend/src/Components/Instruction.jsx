@@ -4,7 +4,7 @@ import "./instruction.css";
 export default function Instruction() {
   return (
     <div className="instruction-container">
-      <h2>How to Use the Application</h2>
+      <h2 className="main-text-ins">How to Use the Application</h2>
       <p className="intro-text">
         Welcome to our Lost & Found application! Follow the steps below to get
         started:
@@ -33,7 +33,7 @@ export default function Instruction() {
         </li>
       </ol>
 
-      <h3>Roadmap</h3>
+      <h3 className="h3tag">Roadmap</h3>
       <p className="roadmap-intro">Here's a quick overview of the process:</p>
       <div className="roadmap">
         <div className="step">
