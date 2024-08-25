@@ -1,14 +1,20 @@
 .instruction-container {
   margin: 40px auto;
   padding: 30px;
-  background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   max-width: 800px;
   font-family: 'Arial', sans-serif;
+
+
+  background: rgba(169, 229, 255, 0.3);
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 5.5px );
+-webkit-backdrop-filter: blur( 5.5px );
+
 }
 
-h2.main-text-ins {
+.main-text-ins {
   text-align: center;
   color: #333;
   font-size: 28px;
@@ -43,7 +49,7 @@ h2.main-text-ins {
   color: #007bff;
 }
 
-h3.h3tag {
+.h3tag {
   text-align: center;
   color: #333;
   font-size: 24px;
