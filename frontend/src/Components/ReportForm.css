@@ -6,7 +6,7 @@
   padding: 16px;
   min-height: 100vh;
   position: relative; /* Added to contain floating balls */
-  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+
 }
 
 /* Form Wrapper */

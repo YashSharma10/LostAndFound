@@ -8,7 +8,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .instructions h2 {
+  .instructions h2.main-title-ins {
     margin-bottom: 20px;
     font-size: 2em;
     color: #333;
@@ -31,13 +31,13 @@
     color: #4a90e2;
   }
   
-  .instruction-card h3 {
+  .instruction-card h3.title-ins {
     margin: 0 0 10px 0;
     font-size: 1.5em;
     color: #333;
   }
   
-  .instruction-card p {
+  .instruction-card p.p-ins {
     margin: 0;
     font-size: 1em;
     color: #666;
