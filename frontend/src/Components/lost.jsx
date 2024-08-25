@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useGlobalContext } from "../context/GlobalContextProvider";
 
 export default function Found() {
-
   const { globalBackendUrl } = useGlobalContext();
   const [search, setSearch] = useState("Search Item");
   const [selectCategory, setSelectCategory] = useState("All");
@@ -159,10 +158,7 @@ export default function Found() {
       </section>
       <div className="itemList">
         {filteredData.map((item) => (
-          <div
-            key={item._id}
-            className={`itemCard ${item.dark ? "dark" : ""}`}
-          >
+          <div key={item._id} className={`itemCard ${item.dark ? "dark" : ""}`}>
             <section className="img-section">
               <img
                 src={item.images[0] || "./src/Assets/Rectangle 14.png"}
@@ -180,7 +176,14 @@ export default function Found() {
                 </section>
                 <section>
                   <p>Location : {item.location}</p>
-                  <p>Date Lost : {item.date}</p>
+                  <p>
+                    Date Lost :{" "}
+                    {new Date(item.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
                 </section>
               </section>
               <section className="dividerSmall"></section>
@@ -191,14 +194,16 @@ export default function Found() {
                   <p>Phone NO : {item.phone || "N/A"}</p>
                 </section>
                 <section className="claimInfo">
-                  {item.status !== "claimed" && currentUser && item.user !== currentUser._id && (
-                    <button
-                      className="claimButton"
-                      onClick={() => handleClaim(item._id)}
-                    >
-                      Claim
-                    </button>
-                  )}
+                  {item.status !== "claimed" &&
+                    currentUser &&
+                    item.user !== currentUser._id && (
+                      <button
+                        className="claimButton"
+                        onClick={() => handleClaim(item._id)}
+                      >
+                        Claim
+                      </button>
+                    )}
                 </section>
                 {/* Add delete button if the logged-in user is the owner of the item */}
                 {currentUser && item.user === currentUser._id && (
