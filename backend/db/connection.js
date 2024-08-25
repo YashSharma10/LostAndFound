@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-const connectionString = "mongodb://localhost:27017/yourdbname";
 
 const connectDB = async () => {
   try {
