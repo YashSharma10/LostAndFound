@@ -109,12 +109,15 @@ app.get(
 
 // Login success
 app.get("/login/success", (req, res) => {
-  if (req.user) {
+  console.log("User is authenticated:", req.isAuthenticated());
+  console.log("Session details:", req.session);
+  if (req.isAuthenticated()) {
     res.status(200).json({ message: "User logged in", user: req.user });
   } else {
     res.status(400).json({ message: "Not Authorized" });
   }
 });
+
 
 // Logout
 app.get("/logout", (req, res, next) => {
