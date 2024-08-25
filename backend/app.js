@@ -56,9 +56,9 @@ app.use(passport.session());
 passport.use(
   new OAuth2Strategy(
     {
-      clientID: clientid,
-      clientSecret: clientsecret,
-      callbackURL: '/auth/google/callback',
+      clientID: "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com",
+      clientSecret: "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",
+      callbackURL: "https://lostandfound-40ek.onrender.com/auth/google/callback",
       scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -94,13 +94,13 @@ passport.deserializeUser((user, done) => {
 
 // Initial Google OAuth login
 app.get(
-  '/auth/google',
+  "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 // Google OAuth callback
 app.get(
-  '/auth/google/callback',
+  "/auth/google/callback",
   passport.authenticate("google", {
     successRedirect: "https://lostandfound-1.onrender.com",
     failureRedirect: "/login",
@@ -108,7 +108,7 @@ app.get(
 );
 
 // Login success
-app.get('/login/success', (req, res) => {
+app.get("/login/success", (req, res) => {
   if (req.user) {
     res.status(200).json({ message: "User logged in", user: req.user });
   } else {
@@ -117,7 +117,7 @@ app.get('/login/success', (req, res) => {
 });
 
 // Logout
-app.get('/logout', (req, res, next) => {
+app.get("/logout", (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
@@ -127,7 +127,7 @@ app.get('/logout', (req, res, next) => {
 });
 
 // Check authentication status
-app.get('/auth/status', (req, res) => {
+app.get("/auth/status", (req, res) => {
   if (req.isAuthenticated()) {
     res.json({ authenticated: true, user: req.user });
   } else {
