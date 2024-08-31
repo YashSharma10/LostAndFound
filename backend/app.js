@@ -23,9 +23,11 @@ const MongoStore = connectMongo.create({
   collectionName: "sessions",
 });
 
+const frontendURL = "http://localhost:5173";
+// const frontendURL = "https://lostandfound-1.onrender.com"
 app.use(
   cors({
-    origin: "https://lostandfound-1.onrender.com",
+    origin: `${frontendURL}`,
     credentials: true,
   })
 );
@@ -37,10 +39,9 @@ app.use(express.static("public"));
 // Setup session middleware
 app.use(
   session({
-    secret: "secretekey",
+    secret: process.env.SESSION_SECRET || "your-secret-key",
     resave: false,
     saveUninitialized: true,
-    store: MongoStore,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
       secure: false,
@@ -49,6 +50,20 @@ app.use(
   })
 );
 
+// app.use(
+//   session({
+//     secret: "secretekey",
+//     resave: false,
+//     saveUninitialized: true,
+//     store: MongoStore,
+//     cookie: {
+//       maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+//       secure: false,
+//       httpOnly: true,
+//     },
+//   })
+// );
+
 // Setup passport
 app.use(passport.initialize());
 app.use(passport.session());
@@ -56,9 +71,10 @@ app.use(passport.session());
 passport.use(
   new OAuth2Strategy(
     {
-      clientID: "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com",
+      clientID:
+        "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "https://lostandfound-40ek.onrender.com/auth/google/callback",
+      callbackURL: `/auth/google/callback`,
       scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -72,6 +88,7 @@ passport.use(
             email: profile.emails[0].value,
             image: profile.photos[0].value,
           });
+          console.log(user);
 
           await user.save();
         }
@@ -85,7 +102,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user._id);
+  done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
@@ -102,15 +119,13 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "https://lostandfound-1.onrender.com",
+    successRedirect: `${frontendURL}`,
     failureRedirect: "/login",
   })
 );
 
 // Login success
 app.get("/login/success", (req, res) => {
-  console.log("User is authenticated:", req.isAuthenticated());
-  console.log("Session details:", req.session);
   if (req.isAuthenticated()) {
     res.status(200).json({ message: "User logged in", user: req.user });
   } else {
@@ -118,14 +133,13 @@ app.get("/login/success", (req, res) => {
   }
 });
 
-
 // Logout
 app.get("/logout", (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
     }
-    res.redirect(globalURL);
+    res.redirect(frontendURL);
   });
 });
 

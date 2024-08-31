@@ -55,6 +55,7 @@ function Header() {
       const response = await axios.get(`${globalBackendUrl}/login/success`, {
         withCredentials: true,
       });
+      
       setUserdata(response.data.user);
     } catch (error) {
       console.log("error", error);
