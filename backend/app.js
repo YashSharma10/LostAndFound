@@ -25,8 +25,8 @@ const MongoStore = connectMongo.create({
 
 app.use(
   cors({
-    // origin: "https://lostandfound-1.onrender.com",
-    origin: "http://localhost:5173",
+    origin: "https://lostandfound-1.onrender.com",
+    // origin: "http://localhost:5173",
     credentials: true,
   })
 );
