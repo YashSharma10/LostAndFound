@@ -25,7 +25,8 @@ const MongoStore = connectMongo.create({
 
 app.use(
   cors({
-    origin: "https://lostandfound-1.onrender.com",
+    // origin: "https://lostandfound-1.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -33,6 +34,10 @@ app.use(
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
+
+app.post("/user/profile", (req, res) => {
+  console.log("User Google",req.body);
+});
 
 // Setup session middleware
 app.use(
@@ -56,9 +61,11 @@ app.use(passport.session());
 passport.use(
   new OAuth2Strategy(
     {
-      clientID: "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com",
+      clientID:
+        "1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: "https://lostandfound-40ek.onrender.com/auth/google/callback",
+      callbackURL:
+        "https://lostandfound-40ek.onrender.com/auth/google/callback",
       scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -109,15 +116,14 @@ app.get(
 
 // Login success
 app.get("/login/success", (req, res) => {
-  console.log("User is authenticated:", req.isAuthenticated());
-  console.log("Session details:", req.session);
+  // console.log("User is authenticated:", req.isAuthenticated());
+  // console.log("Session details:", req.session);
   if (req.isAuthenticated()) {
     res.status(200).json({ message: "User logged in", user: req.user });
   } else {
     res.status(400).json({ message: "Not Authorized" });
   }
 });
-
 
 // Logout
 app.get("/logout", (req, res, next) => {

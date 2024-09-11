@@ -7,7 +7,7 @@ import GlobalContextProvider from "./context/GlobalContextProvider.jsx";
 // import AuthProvider from "./context/AuthProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId="1054288691399-pjasu3r6f77sugpr1ff1n70gg4tpd5hh.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId="707051850826-dkdq5hfrlequsi79qjoektir6n5nletm.apps.googleusercontent.com">
     <GlobalContextProvider>
       <App />
     </GlobalContextProvider>

@@ -7,6 +7,8 @@ const router = express.Router();
 
 // Route to get the logged-in user's data
 router.get("/profile", async (req, res) => {
+  console.log("Google UserData",req.body);
+  
   try {
     const userId = req.user._id; // Assuming user ID is stored in the session or JWT
     const user = await User.findById(userId).populate("reports"); // Populate reports if necessary

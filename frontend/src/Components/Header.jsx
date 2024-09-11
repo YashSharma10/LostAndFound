@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import ncu from "../Assets/ncu.png";
 import ncuDark from "../Assets/ncuDark.png"; // Import the dark mode logo
 import "../App.css";
@@ -11,15 +10,20 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import axiosInstance from "./axios"; // Import axios instance
 import axios from "axios";
 import { useGlobalContext } from "../context/GlobalContextProvider";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function Header() {
-  const {globalBackendUrl} = useGlobalContext()
+  const { globalBackendUrl } = useGlobalContext();
   const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState(null); // User state, initially null
   const [isDarkMode, setIsDarkMode] = useState(false); // Light mode by default
   const [imgUrl, setImgUrl] = useState(ncu);
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  async function userProfile(data) {
+    await axios.post(`${globalBackendUrl}/user/profile`, data);
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -50,27 +54,27 @@ function Header() {
 
   const [userdata, setUserdata] = useState({});
 
-  const getUser = async () => {
-    try {
-      const response = await axios.get(`${globalBackendUrl}/login/success`, {
-        withCredentials: true,
-      });
-      setUserdata(response.data.user);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-  
+  // const getUser = async () => {
+  //   try {
+  //     const response = await axios.get(`${globalBackendUrl}/login/success`, {
+  //       withCredentials: true,
+  //     });
+  //     setUserdata(response.data.user);
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
 
   // logoout
-  const logout = () => {
-    window.open(`${globalBackendUrl}/logout`, "_self");
-  };
-  const loginwithgoogle = () => {
-    window.open(`${globalBackendUrl}/auth/google/callback`, "_self");
-  };
+  // const logout = () => {
+  //   window.open(`${globalBackendUrl}/logout`, "_self");
+  // };
+  // const loginwithgoogle = () => {
+  //   window.open(`${globalBackendUrl}/auth/google/callback`, "_self");
+  // };
+
   useEffect(() => {
-    getUser();
+    // getUser();
   }, []);
   return (
     <div>
@@ -122,8 +126,21 @@ function Header() {
             <span className="balldark"></span>
           </label>
         </div>
+
         <div className="btns">
-          {Object?.keys(userdata)?.length > 0 ? (
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              const userData = jwtDecode(credentialResponse.credential);
+              userProfile(userData);
+
+              console.log(credentialResponse, "DecrepedData :", userData);
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
+          <button onClick={() => googleLogout}>Logout</button>
+          {/* {Object?.keys(userdata)?.length > 0 ? (
             <div className="google">
               <li style={{ color: "black", fontWeight: "bold" }}>
                 {userdata?.displayName}
@@ -151,7 +168,7 @@ function Header() {
               />
               <span> Sign in with Google</span>
             </button>
-          )}
+          )} */}
         </div>
       </header>
     </div>
