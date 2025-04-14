@@ -1,3 +1,4 @@
+// UserProfile.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaUser } from "react-icons/fa";
@@ -5,17 +6,15 @@ import "./UserProfile.css";
 import { useGlobalContext } from "../context/GlobalContextProvider";
 
 export default function UserProfile() {
-  const {globalBackendUrl} = useGlobalContext()
+  const { globalBackendUrl } = useGlobalContext();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Add error state
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch user data from the backend
     axios
       .get(`${globalBackendUrl}/login/success`, { withCredentials: true })
       .then((response) => {
-        console.log("User data:", response.data); // Debugging statement
         setUserData(response.data.user);
         setLoading(false);
       })
@@ -24,23 +23,11 @@ export default function UserProfile() {
         setError("Error fetching user data. Please try again.");
         setLoading(false);
       });
-  }, []);
+  }, [globalBackendUrl]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!userData) {
-    return (
-      <div>
-        <p>Please <a href="/auth/google">sign in with Google</a> to access your profile.</p>
-      </div>
-    );
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!userData) return <div><p>Please <a href="/auth/google">sign in with Google</a> to access your profile.</p></div>;
 
   return (
     <div className="profile-container">
@@ -60,12 +47,11 @@ export default function UserProfile() {
             <p>{userData.email}</p>
           </div>
           <div className="profile-buttons">
-            <button className="profile-btn">Edit Profile</button>
-            <button className="profile-btn">Edit Post</button>
+            <button className="profile-btn" aria-label="Edit Profile">Edit Profile</button>
+            <button className="profile-btn" aria-label="Edit Post">Edit Post</button>
           </div>
         </div>
       </div>
-
       <div className="posted-detail">
         <h3 className="posted-heading">Posted</h3>
         <table className="posts-table">
@@ -96,9 +82,7 @@ export default function UserProfile() {
                 </tr>
               ))
             ) : (
-              <tr>
-                <td colSpan="4">No posts found.</td>
-              </tr>
+              <tr><td colSpan="4">No posts found.</td></tr>
             )}
           </tbody>
         </table>

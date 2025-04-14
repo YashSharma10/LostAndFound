@@ -1,12 +1,11 @@
-import React from 'react';
-import { createContext, useContext } from 'react';
+// GlobalContextProvider.js
+import React, { createContext, useContext } from 'react';
 
 export const GlobalContext = createContext();
 
 export default function GlobalContextProvider({ children }) {
-  const globalBackendUrl = "https://lostandfound-40ek.onrender.com";
-  // const globalBackendUrl = "http://localhost:6005";
-  
+  const globalBackendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:6005";
+
   return (
     <GlobalContext.Provider value={{ globalBackendUrl }}>
       {children}
@@ -14,4 +13,10 @@ export default function GlobalContextProvider({ children }) {
   );
 }
 
-export const useGlobalContext = () => useContext(GlobalContext);
+export const useGlobalContext = () => {
+  const context = useContext(GlobalContext);
+  if (context === undefined) {
+    throw new Error('useGlobalContext must be used within a GlobalContextProvider');
+  }
+  return context;
+};
